@@ -1,0 +1,15 @@
+//
+//  AnalyticsLogger.swift
+//  swift-app
+//
+//  Created by Maksims Pelna on 26/12/2025.
+//
+
+import Observation
+
+@Observable
+final class AnalyticsLogger: AnalyticsServiceInjectable {
+    func log(_ event: AnalyticsEvent) -> Void {
+        analyticsService.log(event)
+    }
+}
