@@ -2,6 +2,8 @@
 
 A demonstration project showcasing my approach to building scalable, testable, and maintainable Swift apps via Clean architecture
 
+<video src="https://github.com/user-attachments/assets/2b6c6402-172e-4fb9-b2ff-78b75917c27c" width="352" height="720"></video>
+
 ## Architecture
 
 There are three layers: Data, Domain, and Presentation (feature-based or screen-based). In the current app, the Domain layer is implemented without use cases, as this extra separation is optional for me. In a real app, I would implement use cases if there were multiple data sources - for example, persisted data and an API. This allows a use case to coordinate multiple services and decide which data to take, removing duplicated logic from ViewModels
@@ -60,6 +62,6 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 
 ## TODO:
 
-[ ] UI tests
-[ ] Unit tests
-[ ] Flavors
+- UI tests
+- Unit tests
+- Flavors
