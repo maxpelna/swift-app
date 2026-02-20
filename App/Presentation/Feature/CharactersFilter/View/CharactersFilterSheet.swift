@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CharactersFilterSheet: View {
-
     let viewConfig: CharactersFilterViewConfig
 
     @State private var viewModel = CharactersFiltersViewModel()

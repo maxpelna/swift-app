@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AppView: View {
-
     @State private var coordinator = Coordinator()
     @State private var viewModel = AppViewModel()
 

@@ -12,8 +12,10 @@ extension CharacterStatus {
         switch self {
         case .alive:
             return String(localized: .characterStatusAlive)
+
         case .dead:
             return String(localized: .characterStatusDead)
+
         case .unknown:
             return String(localized: .characterStatusUnknown)
         }

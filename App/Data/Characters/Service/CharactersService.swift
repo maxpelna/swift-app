@@ -8,7 +8,6 @@
 import Foundation
 
 final class CharactersService: PCharactersService {
-
     let apiClient: APIClient
 
     init(apiClient: APIClient) {
@@ -21,13 +20,18 @@ final class CharactersService: PCharactersService {
         status: CharacterStatus?,
         gender: CharacterGender?
     ) async throws -> CharactersResult {
-        try await apiClient.request(
-            CharactersResultEndpoint(
-                page: page,
-                name: name,
-                status: CharacterStatusParameter(from: status),
-                gender: CharacterGenderParameter(from: gender)
+        do {
+            let response = try await apiClient.request(
+                CharactersResultEndpoint(
+                    page: page,
+                    name: name,
+                    status: CharacterStatusParameter(from: status),
+                    gender: CharacterGenderParameter(from: gender)
+                )
             )
-        ).toDomain()
+            return response.toDomain()
+        } catch let error as APIError {
+            throw error.toAppError()
+        }
     }
 }

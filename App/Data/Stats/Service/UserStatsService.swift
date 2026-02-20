@@ -6,40 +6,34 @@
 //
 
 import Combine
-import SwiftUI
+import Foundation
 
 final class UserStatsService: PUserStatsService {
+    var reloadAppStatusTrigger: AnyPublisher<Void, Never> { _reloadAppStatusTrigger.eraseToAnyPublisher() }
 
-    // To match latest technologies I am using SwiftUI's AppStorage property wrapper.
-    // Usually SwiftUI should not be in Data module.
-    @AppStorage(UserStatsKeys.isOnboardingFinished.rawValue)
-    private var isOnboardingFinished: Bool = false
-
-    @AppStorage(UserStatsKeys.appTheme.rawValue)
-    private var theme: AppTheme = .system
-
-    let reloadAppStatusTrigger = PassthroughSubject<Void, Never>()
+    private let _reloadAppStatusTrigger = PassthroughSubject<Void, Never>()
 
     func getIsOnboardingFinished() -> Bool {
-        isOnboardingFinished == true
+        UserDefaults.standard.bool(forKey: UserStatsKeys.isOnboardingFinished.rawValue)
     }
-    
-    func setIsOnboardingFinished() -> Void {
-        isOnboardingFinished = true
-        reloadAppStatusTrigger.send(())
+
+    func setIsOnboardingFinished() {
+        UserDefaults.standard.set(true, forKey: UserStatsKeys.isOnboardingFinished.rawValue)
+        _reloadAppStatusTrigger.send(())
     }
 
     func getAppTheme() -> AppTheme {
-        return theme
+        let raw = UserDefaults.standard.string(forKey: UserStatsKeys.appTheme.rawValue) ?? ""
+        return AppTheme(rawValue: raw) ?? .system
     }
 
     func setAppTheme(_ theme: AppTheme) {
-        self.theme = theme
+        UserDefaults.standard.set(theme.rawValue, forKey: UserStatsKeys.appTheme.rawValue)
     }
 
-    func resetAll() -> Void {
-        isOnboardingFinished = false
-        theme = .system
-        reloadAppStatusTrigger.send(())
+    func resetAll() {
+        UserDefaults.standard.set(false, forKey: UserStatsKeys.isOnboardingFinished.rawValue)
+        UserDefaults.standard.set(AppTheme.system.rawValue, forKey: UserStatsKeys.appTheme.rawValue)
+        _reloadAppStatusTrigger.send(())
     }
 }

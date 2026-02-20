@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-
     @State private var viewModel = SettingsViewModel()
     @State private var showResetAlert: Bool = false
 
-    @Environment(\.coordinator) private var coordinator
-    @Environment(\.analyticsLogger) private var logger
+    @Environment(\.coordinator)
+    private var coordinator
+
+    @Environment(\.analyticsLogger)
+    private var logger
 
     var body: some View {
         List {
@@ -69,13 +71,12 @@ struct SettingsView: View {
         coordinator.presentSheet(
             .appThemePicker(
                 ThemePickerViewConfig(
-                    selectedTheme: viewModel.selectedTheme,
-                    onChangeTheme: { theme in
-                        coordinator.dismissSheet()
-                        triggerThemeChange(theme)
-                        viewModel.addEvent(.changeTheme(theme))
-                    }
-                )
+                    selectedTheme: viewModel.selectedTheme
+                ) { theme in
+                    coordinator.dismissSheet()
+                    triggerThemeChange(theme)
+                    viewModel.addEvent(.changeTheme(theme))
+                }
             )
         )
     }

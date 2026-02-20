@@ -10,8 +10,7 @@ import Observation
 
 @Observable
 final class ErrorHandler {
-
-    private(set) var errorMessage: String? = nil
+    private(set) var errorMessage: String?
 
     func showErrorMessage(_ error: Error?) {
         guard let error else { return }
@@ -24,20 +23,18 @@ final class ErrorHandler {
 
     private func localizeError(_ error: Error) -> String? {
         switch error {
-        case AppError.emptyState:
+        case AppError.emptyState, AppError.notFound:
             return nil
-        case APIError.invalidUrl:
-            return String(localized: .errorInvalidUrl)
-        case APIError.decoding:
+
+        case AppError.networkUnavailable:
+            return String(localized: .errorNetworkUnavailable)
+
+        case AppError.decodingFailed:
             return String(localized: .errorDecode)
-        case APIError.server(let statusCode, let description):
-            if let description = description {
-                return description
-            } else {
-                return String(localized: .errorServerStatus(statusCode))
-            }
-        case APIError.unknown(_):
-            return String(localized: .errorDefault)
+
+        case AppError.serverError(let statusCode):
+            return String(localized: .errorServerStatus(statusCode))
+
         default:
             return String(localized: .errorDefault)
         }

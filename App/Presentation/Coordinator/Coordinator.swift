@@ -9,8 +9,7 @@ import SwiftUI
 
 @Observable
 final class Coordinator {
-
-    var path: NavigationPath = NavigationPath()
+    var path = NavigationPath()
     var sheet: SheetRoute?
 
     func pushPage(_ pageRoute: PageRoute) {

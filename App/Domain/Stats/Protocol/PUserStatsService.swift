@@ -8,11 +8,11 @@
 import Combine
 
 protocol PUserStatsService {
-    var reloadAppStatusTrigger: PassthroughSubject<Void, Never> { get }
+    var reloadAppStatusTrigger: AnyPublisher<Void, Never> { get }
 
     func getIsOnboardingFinished() -> Bool
-    func setIsOnboardingFinished() -> Void
+    func setIsOnboardingFinished()
     func getAppTheme() -> AppTheme
-    func setAppTheme(_ theme: AppTheme) -> Void
-    func resetAll() -> Void
+    func setAppTheme(_ theme: AppTheme)
+    func resetAll()
 }

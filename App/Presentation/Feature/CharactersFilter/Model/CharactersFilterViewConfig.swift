@@ -22,6 +22,6 @@ extension CharactersFilterViewConfig: Hashable {
 
 extension CharactersFilterViewConfig: Equatable {
     static func == (lhs: CharactersFilterViewConfig, rhs: CharactersFilterViewConfig) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.selectedGender == rhs.selectedGender && lhs.selectedStatus == rhs.selectedStatus
     }
 }

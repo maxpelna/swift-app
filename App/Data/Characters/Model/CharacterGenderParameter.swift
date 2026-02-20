@@ -25,10 +25,13 @@ enum CharacterGenderParameter: String, Codable {
         switch domain {
         case .female:
             self = .female
+
         case .male:
             self = .male
+
         case .genderless:
             self = .genderless
+
         case .unknown:
             self = .unknown
         }
@@ -38,10 +41,13 @@ enum CharacterGenderParameter: String, Codable {
         switch self {
         case .female:
             return .female
+
         case .male:
             return .male
+
         case .genderless:
             return .genderless
+
         case .unknown:
             return .unknown
         }

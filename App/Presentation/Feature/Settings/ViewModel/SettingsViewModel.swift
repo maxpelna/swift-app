@@ -9,11 +9,6 @@ import Observation
 
 @Observable
 final class SettingsViewModel: UserStatsServiceInjectable {
-
-    // MARK: - State
-
-    private(set) var selectedTheme: AppTheme = .system
-
     // MARK: - Event
 
     enum Event {
@@ -22,12 +17,16 @@ final class SettingsViewModel: UserStatsServiceInjectable {
         case resetStats
     }
 
+    // MARK: - State
+
+    private(set) var selectedTheme: AppTheme = .system
+
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {
         switch event {
         case .initialLoad: initialLoad()
-        case .changeTheme(let theme): changeTheme(theme)
+        case let .changeTheme(theme): changeTheme(theme)
         case .resetStats: resetStats()
         }
     }

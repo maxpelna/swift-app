@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct Icons {
-    static var search = "magnifyingglass"
-    static var slash = "bonjour"
-    static var noNetworkConnection = "wifi.slash"
-    static var filter = "line.3.horizontal.decrease"
-    static var settings = "gearshape"
-    static var checkmark = "checkmark"
-    static var circleCheckmarkFilled = "checkmark.circle.fill"
-    static var circleCheckmarkEmpty = "circle"
-    static var warning = "exclamationmark.circle.fill"
+enum Icons {
+    static let search = "magnifyingglass"
+    static let slash = "line.diagonal"
+    static let noNetworkConnection = "wifi.slash"
+    static let filter = "line.3.horizontal.decrease"
+    static let settings = "gearshape"
+    static let checkmark = "checkmark"
+    static let circleCheckmarkFilled = "checkmark.circle.fill"
+    static let circleCheckmarkEmpty = "circle"
+    static let warning = "exclamationmark.circle.fill"
 }

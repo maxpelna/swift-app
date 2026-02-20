@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ThemePickerView: View {
-
     let viewConfig: ThemePickerViewConfig
 
     var body: some View {

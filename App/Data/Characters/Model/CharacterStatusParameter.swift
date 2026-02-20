@@ -24,8 +24,10 @@ enum CharacterStatusParameter: String, Codable {
         switch domain {
         case .alive:
             self = .alive
+
         case .dead:
             self = .dead
+
         case .unknown:
             self = .unknown
         }
@@ -35,8 +37,10 @@ enum CharacterStatusParameter: String, Codable {
         switch self {
         case .alive:
             return .alive
+
         case .dead:
             return .dead
+
         case .unknown:
             return .unknown
         }

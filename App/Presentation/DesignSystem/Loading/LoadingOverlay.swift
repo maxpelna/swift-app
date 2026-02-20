@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct LoadingOverlay<Content: View>: View {
-
     let isLoading: Bool
 
     @ViewBuilder var content: () -> Content

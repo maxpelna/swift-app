@@ -10,6 +10,13 @@ import Combine
 
 @Observable
 final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable {
+    // MARK: - Event
+
+    enum Event {
+        case startApp
+        case listenStats
+        case listenConnectivity
+    }
 
     // MARK: - Private
 
@@ -20,14 +27,6 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     private(set) var appState: AppState = .loading
     private(set) var appTheme: AppTheme = .system
     private(set) var isConnected = true
-
-    // MARK: - Event
-
-    enum Event {
-        case startApp
-        case listenStats
-        case listenConnectivity
-    }
 
     // MARK: - Handlers
 

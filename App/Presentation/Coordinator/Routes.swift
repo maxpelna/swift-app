@@ -15,8 +15,8 @@ enum PageRoute: Hashable {
 }
 
 enum SheetRoute: Hashable, Identifiable {
-    var id: Self { self }
-
     case charactersFilter(CharactersFilterViewConfig)
     case appThemePicker(ThemePickerViewConfig)
+
+    var id: Self { self }
 }

@@ -9,6 +9,15 @@ import Observation
 
 @Observable
 final class CharactersListViewModel: CharactersServiceInjectable {
+    // MARK: - Event
+
+    enum Event {
+        case initialLoad
+        case loadMore
+        case clearLoadMore
+        case setSearchQuery(String)
+        case setFilters(CharacterGender?, CharacterStatus?)
+    }
 
     // MARK: - Private variables
 
@@ -20,12 +29,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     private(set) var charactersResult: DelayedResult<[CharacterEntity]> = DelayedResult.none()
     private(set) var loadMoreResult: DelayedResult<Void> = DelayedResult.none()
     private(set) var searchQuery: String = ""
-    private(set) var selectedGender: CharacterGender? = nil
-    private(set) var selectedStatus: CharacterStatus? = nil
-
-    func canLoadMore(_ id: Int) -> Bool {
-        !loadMoreResult.isInProgress && charactersResult.value?.last?.id == id
-    }
+    private(set) var selectedGender: CharacterGender?
+    private(set) var selectedStatus: CharacterStatus?
 
     var hasAppliedFilters: Bool {
         selectedGender != nil || selectedStatus != nil
@@ -35,17 +40,11 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         !charactersResult.isInProgress && (charactersResult.value ?? []).isEmpty
     }
 
-    // MARK: - Event
-
-    enum Event {
-        case initialLoad
-        case loadMore
-        case clearLoadMore
-        case setSearchQuery(String)
-        case setFilters(CharacterGender?, CharacterStatus?)
-    }
-
     // MARK: - Handlers
+
+    func canLoadMore(_ id: Int) -> Bool {
+        !loadMoreResult.isInProgress && charactersResult.value?.last?.id == id
+    }
 
     func addEvent(_ event: Event) {
         Task {
@@ -53,8 +52,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             case .initialLoad: await initialLoad()
             case .loadMore: await loadMore()
             case .clearLoadMore: clearLoadMoreResult()
-            case .setSearchQuery(let query): await setSearchQuery(query: query)
-            case .setFilters(let gender, let status): await setFilters(gender: gender, status: status)
+            case let .setSearchQuery(query): await setSearchQuery(query: query)
+            case let .setFilters(gender, status): await setFilters(gender: gender, status: status)
             }
         }
     }
@@ -95,9 +94,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             )
 
             var updatedCharactersList = [CharacterEntity]()
-            updatedCharactersList.append(
-                contentsOf: charactersResult.value ?? []
-            )
+            updatedCharactersList.append(contentsOf: charactersResult.value ?? [])
             updatedCharactersList.append(contentsOf: result.characters)
 
             charactersResult = .fromValue(updatedCharactersList)

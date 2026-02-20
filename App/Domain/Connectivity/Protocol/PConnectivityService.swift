@@ -8,5 +8,5 @@
 import Combine
 
 protocol PConnectivityService {
-    var connectivityStatus: CurrentValueSubject<Bool, Never> { get }
+    var connectivityStatus: AnyPublisher<Bool, Never> { get }
 }

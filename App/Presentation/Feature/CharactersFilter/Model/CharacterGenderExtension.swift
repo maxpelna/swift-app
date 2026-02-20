@@ -12,10 +12,13 @@ extension CharacterGender {
         switch self {
         case .male:
             return String(localized: .characterGenderMale)
+
         case .female:
             return String(localized: .characterGenderFemale)
+
         case .genderless:
             return String(localized: .characterGenderGenderless)
+
         case .unknown:
             return String(localized: .characterGenderUnknown)
         }

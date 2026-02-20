@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct EnvConfig {
+enum EnvConfig {
     static let baseUrl = "https://rickandmortyapi.com/api"
 }

@@ -42,14 +42,6 @@ final class APIClient {
                 throw APIError.server(statusCode: httpResponse.statusCode, description: nil)
             }
 
-            // Normally, we don't map against text but against static codes in response objects,
-            // provided by back-end documentation. In this example, I just catch empty state error
-            // from response and map it to AppError so no toast is shown.
-            // TODO: better option to use interceptor for such cases.
-            if errorDescriptionFromAPI?.lowercased() == "there is nothing here" {
-                throw AppError.emptyState
-            }
-
             throw APIError.server(statusCode: httpResponse.statusCode, description: errorDescriptionFromAPI)
         }
 

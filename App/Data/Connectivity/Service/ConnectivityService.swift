@@ -9,15 +9,15 @@ import Combine
 import Network
 
 final class ConnectivityService: PConnectivityService {
+    var connectivityStatus: AnyPublisher<Bool, Never> { _connectivityStatus.eraseToAnyPublisher() }
 
-    let connectivityStatus = CurrentValueSubject<Bool, Never>(true)
-
+    private let _connectivityStatus = CurrentValueSubject<Bool, Never>(true)
     private let networkMonitor = NWPathMonitor()
     private let workerQueue = DispatchQueue(label: "ConnectivityChecker")
 
     init() {
         networkMonitor.pathUpdateHandler = { [weak self] path in
-            self?.connectivityStatus.send(path.status == .satisfied)
+            self?._connectivityStatus.send(path.status == .satisfied)
         }
         networkMonitor.start(queue: workerQueue)
     }

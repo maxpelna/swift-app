@@ -9,4 +9,9 @@ import Foundation
 
 enum AppError: Error {
     case emptyState
+    case networkUnavailable
+    case serverError(statusCode: Int)
+    case decodingFailed
+    case notFound
+    case unknown
 }

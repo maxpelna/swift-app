@@ -290,6 +290,23 @@
         }
       }
     },
+    "errorNetworkUnavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexión a internet"
+          }
+        }
+      }
+    },
     "errorInvalidUrl" : {
       "extractionState" : "manual",
       "localizations" : {

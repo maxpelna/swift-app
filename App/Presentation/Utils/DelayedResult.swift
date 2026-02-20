@@ -12,6 +12,18 @@ struct DelayedResult<T> {
     let error: Error?
     let isInProgress: Bool
 
+    var isSuccessful: Bool {
+        value != nil
+    }
+
+    var isError: Bool {
+        error != nil
+    }
+
+    var isNone: Bool {
+        value == nil && error == nil && !isInProgress
+    }
+
     // MARK: - Initializers
 
     init(value: T?, error: Error?, isInProgress: Bool) {
@@ -37,24 +49,10 @@ struct DelayedResult<T> {
     }
 
     static func fromNullable(_ value: T?) -> DelayedResult {
-        value == nil ? .none() : .fromValue(value!)
+        value.map { .fromValue($0) } ?? .none()
     }
 
     static func success() -> DelayedResult<Void> {
         .fromValue(())
-    }
-
-    // MARK: - State Helpers
-
-    var isSuccessful: Bool {
-        value != nil
-    }
-
-    var isError: Bool {
-        error != nil
-    }
-
-    var isNone: Bool {
-        value == nil && error == nil && !isInProgress
     }
 }

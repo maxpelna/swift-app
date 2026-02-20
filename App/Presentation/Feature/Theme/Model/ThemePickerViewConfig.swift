@@ -20,6 +20,6 @@ extension ThemePickerViewConfig: Hashable {
 
 extension ThemePickerViewConfig: Equatable {
     static func == (lhs: ThemePickerViewConfig, rhs: ThemePickerViewConfig) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.selectedTheme == rhs.selectedTheme
     }
 }

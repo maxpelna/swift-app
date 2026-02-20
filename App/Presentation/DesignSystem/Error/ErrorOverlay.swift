@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ErrorOverlay<Content: View>: View {
-
     @ViewBuilder var content: () -> Content
 
-    @Environment(\.errorHandler) private var errorHandler
+    @Environment(\.errorHandler)
+    private var errorHandler
 
     var body: some View {
         content()

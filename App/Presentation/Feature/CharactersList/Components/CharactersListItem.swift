@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CharactersListItem: View {
-
     let character: CharacterEntity
 
     var body: some View {

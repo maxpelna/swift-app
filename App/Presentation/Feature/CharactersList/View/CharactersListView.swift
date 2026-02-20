@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct CharactersListView: View {
-
     @State private var viewModel = CharactersListViewModel()
     @State private var showFilters: Bool = false
 
     @StateObject private var debounceObserver = InputDebounceObserver()
 
-    @Environment(\.coordinator) private var coordinator
-    @Environment(\.errorHandler) private var errorHandler
+    @Environment(\.coordinator)
+    private var coordinator
+
+    @Environment(\.errorHandler)
+    private var errorHandler
 
     var body: some View {
         LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress) {
@@ -87,17 +89,16 @@ struct CharactersListView: View {
             .charactersFilter(
                 CharactersFilterViewConfig(
                     selectedGender: viewModel.selectedGender,
-                    selectedStatus: viewModel.selectedStatus,
-                    onApply: { selectedGender, selectedStatus in
-                        coordinator.dismissSheet()
-                        viewModel.addEvent(
-                            .setFilters(
-                                selectedGender,
-                                selectedStatus
-                            )
+                    selectedStatus: viewModel.selectedStatus
+                ) { selectedGender, selectedStatus in
+                    coordinator.dismissSheet()
+                    viewModel.addEvent(
+                        .setFilters(
+                            selectedGender,
+                            selectedStatus
                         )
-                    }
-                )
+                    )
+                }
             )
         )
     }

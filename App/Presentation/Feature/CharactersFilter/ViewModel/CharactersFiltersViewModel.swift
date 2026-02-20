@@ -9,12 +9,6 @@ import Observation
 
 @Observable
 final class CharactersFiltersViewModel {
-
-    // MARK: - State
-
-    private(set) var selectedGender: CharacterGender? = nil
-    private(set) var selectedStatus: CharacterStatus? = nil
-
     // MARK: - Event
 
     enum Event {
@@ -24,13 +18,18 @@ final class CharactersFiltersViewModel {
         case clearFilters
     }
 
+    // MARK: - State
+
+    private(set) var selectedGender: CharacterGender?
+    private(set) var selectedStatus: CharacterStatus?
+
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {
         switch event {
-        case .initialLoad(let gender, let status): initialLoad(gender: gender, status: status)
-        case .setGender(let gender): setGender(gender)
-        case .setStatus(let status): setStatus(status)
+        case let .initialLoad(gender, status): initialLoad(gender: gender, status: status)
+        case let .setGender(gender): setGender(gender)
+        case let .setStatus(status): setStatus(status)
         case .clearFilters: clearFilters()
         }
     }

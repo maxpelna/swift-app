@@ -9,7 +9,7 @@ import Observation
 
 @Observable
 final class AnalyticsLogger: AnalyticsServiceInjectable {
-    func log(_ event: AnalyticsEvent) -> Void {
+    func log(_ event: AnalyticsEvent) {
         analyticsService.log(event)
     }
 }

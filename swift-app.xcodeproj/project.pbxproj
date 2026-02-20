@@ -48,8 +48,6 @@
 		};
 		18B9A3332EDCC81400F2C64F /* UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = UITests;
 			sourceTree = "<group>";
 		};
@@ -241,6 +239,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		8493B2FDD81548C702E6729C /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

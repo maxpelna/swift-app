@@ -9,7 +9,6 @@ import Observation
 
 @Observable
 final class OnboardingViewModel: UserStatsServiceInjectable {
-
     // MARK: - Event
 
     enum Event {
