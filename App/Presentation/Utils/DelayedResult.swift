@@ -8,7 +8,6 @@
 import Foundation
 
 struct DelayedResult<T> {
-
     let value: T?
     let error: Error?
     let isInProgress: Bool

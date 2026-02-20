@@ -16,8 +16,8 @@ final class ConnectivityService: PConnectivityService {
     private let workerQueue = DispatchQueue(label: "ConnectivityChecker")
 
     init() {
-        networkMonitor.pathUpdateHandler = { path in
-            self.connectivityStatus.send(path.status == .satisfied)
+        networkMonitor.pathUpdateHandler = { [weak self] path in
+            self?.connectivityStatus.send(path.status == .satisfied)
         }
         networkMonitor.start(queue: workerQueue)
     }

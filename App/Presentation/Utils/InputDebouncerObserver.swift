@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+@MainActor
 final class InputDebounceObserver: ObservableObject {
     
     @Published var input = ""

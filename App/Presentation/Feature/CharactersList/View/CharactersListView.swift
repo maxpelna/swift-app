@@ -17,73 +17,69 @@ struct CharactersListView: View {
     @Environment(\.coordinator) private var coordinator
     @Environment(\.errorHandler) private var errorHandler
 
-    init() {
-        viewModel.addEvent(.initialLoad)
-    }
-
     var body: some View {
-        NavigationView {
-            LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress) {
-                if viewModel.isEmptyList {
-                    CharactersEmptyView()
-                } else {
-                    List {
-                        ForEach(viewModel.charactersResult.value ?? []) { character in
-                            CharactersListItem(character: character)
-                                .onAppear {
-                                    tryToLoadMoreItems(character.id)
-                                }
-                        }
+        LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress) {
+            if viewModel.isEmptyList {
+                CharactersEmptyView()
+            } else {
+                List {
+                    ForEach(viewModel.charactersResult.value ?? []) { character in
+                        CharactersListItem(character: character)
+                            .onAppear {
+                                tryToLoadMoreItems(character.id)
+                            }
+                    }
 
-                        if viewModel.loadMoreResult.isInProgress {
-                            ProgressView()
-                                .id(viewModel.charactersResult.value?.count ?? 0)
-                                .tint(.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets())
-                                .listRowBackground(Color.clear)
-                        }
+                    if viewModel.loadMoreResult.isInProgress {
+                        ProgressView()
+                            .tint(.accentColor)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
-            .background(Color.backgroundPrimary)
-            .navigationTitle(.charactersTitle)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: onFilterIconTap) {
-                        Image(systemName: Icons.filter)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: onSettingsIconTap) {
-                        Image(systemName: Icons.settings)
-                    }
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.backgroundPrimary)
+        .navigationTitle(.charactersTitle)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onFilterIconTap) {
+                    Image(systemName: Icons.filter)
                 }
             }
-            .searchable(text: $debounceObserver.input)
-            .searchPresentationToolbarBehavior(.avoidHidingContent)
-            .onChange(of: debounceObserver.output) { _, newValue in
-                viewModel.addEvent(.setSearchQuery(newValue))
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onSettingsIconTap) {
+                    Image(systemName: Icons.settings)
+                }
             }
-            .onChange(of: viewModel.charactersResult.isError) { oldValue, newValue in
-                guard let error = viewModel.charactersResult.error else { return }
+        }
+        .searchable(text: $debounceObserver.input)
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .task {
+            viewModel.addEvent(.initialLoad)
+        }
+        .onChange(of: debounceObserver.output) { _, newValue in
+            viewModel.addEvent(.setSearchQuery(newValue))
+        }
+        .onChange(of: viewModel.charactersResult.isError) { _, newValue in
+            guard newValue, let error = viewModel.charactersResult.error else { return }
 
-                errorHandler.showErrorMessage(error)
-            }
-            .onChange(of: viewModel.loadMoreResult.isError) { oldValue, newValue in
-                guard let error = viewModel.loadMoreResult.error else { return }
+            errorHandler.showErrorMessage(error)
+        }
+        .onChange(of: viewModel.loadMoreResult.isError) { _, newValue in
+            guard newValue, let error = viewModel.loadMoreResult.error else { return }
 
-                errorHandler.showErrorMessage(error)
-            }
+            errorHandler.showErrorMessage(error)
         }
     }
 
     private func tryToLoadMoreItems(_ id: Int) {
         guard viewModel.canLoadMore(id) else { return }
 
-        viewModel.addEvent(.loadMode)
+        viewModel.addEvent(.loadMore)
     }
 
     private func onFilterIconTap() {

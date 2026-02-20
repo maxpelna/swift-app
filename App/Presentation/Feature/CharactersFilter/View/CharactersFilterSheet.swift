@@ -14,7 +14,7 @@ struct CharactersFilterSheet: View {
     @State private var viewModel = CharactersFiltersViewModel()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     ForEach(CharacterGender.allCases, id: \.rawValue) { gender in

@@ -8,15 +8,15 @@
 import Foundation
 
 enum CharacterGenderParameter: String, Codable {
-    case Female
-    case Male
-    case Genderless
-    case Unknown
+    case female
+    case male
+    case genderless
+    case unknown
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let value = try container.decode(String.self).lowercased()
-        self = CharacterGenderParameter(rawValue: value) ?? .Unknown
+        let value = try container.decode(String.self)
+        self = CharacterGenderParameter(rawValue: value) ?? .unknown
     }
 
     init?(from domain: CharacterGender?) {
@@ -24,25 +24,25 @@ enum CharacterGenderParameter: String, Codable {
 
         switch domain {
         case .female:
-            self = .Female
+            self = .female
         case .male:
-            self = .Male
+            self = .male
         case .genderless:
-            self = .Genderless
+            self = .genderless
         case .unknown:
-            self = .Unknown
+            self = .unknown
         }
     }
 
     func toDomain() -> CharacterGender? {
         switch self {
-        case .Female:
+        case .female:
             return .female
-        case .Male:
+        case .male:
             return .male
-        case .Genderless:
+        case .genderless:
             return .genderless
-        case .Unknown:
+        case .unknown:
             return .unknown
         }
     }

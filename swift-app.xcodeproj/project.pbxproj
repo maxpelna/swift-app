@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18030D092F48E8300023D50B /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		180445F12EF0793300AEBB4E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		18B9A3172EDCC81300F2C64F /* swift-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18B9A3262EDCC81400F2C64F /* swift-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,6 +48,8 @@
 		};
 		18B9A3332EDCC81400F2C64F /* UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = UITests;
 			sourceTree = "<group>";
 		};
@@ -80,6 +83,7 @@
 		18B9A30E2EDCC81300F2C64F = {
 			isa = PBXGroup;
 			children = (
+				18030D092F48E8300023D50B /* .swiftlint.yml */,
 				180445F12EF0793300AEBB4E /* README.md */,
 				18B9A3192EDCC81300F2C64F /* App */,
 				18B9A3292EDCC81400F2C64F /* UnitTests */,
@@ -106,6 +110,7 @@
 			buildConfigurationList = 18B9A33A2EDCC81400F2C64F /* Build configuration list for PBXNativeTarget "swift-app" */;
 			buildPhases = (
 				18B9A3132EDCC81300F2C64F /* Sources */,
+				8493B2FDD81548C702E6729C /* SwiftLint */,
 				18B9A3142EDCC81300F2C64F /* Frameworks */,
 				18B9A3152EDCC81300F2C64F /* Resources */,
 			);
@@ -117,8 +122,6 @@
 				18B9A3192EDCC81300F2C64F /* App */,
 			);
 			name = "swift-app";
-			packageProductDependencies = (
-			);
 			productName = "swift-app";
 			productReference = 18B9A3172EDCC81300F2C64F /* swift-app.app */;
 			productType = "com.apple.product-type.application";
@@ -140,8 +143,6 @@
 				18B9A3292EDCC81400F2C64F /* UnitTests */,
 			);
 			name = "swift-appTests";
-			packageProductDependencies = (
-			);
 			productName = "swift-appTests";
 			productReference = 18B9A3262EDCC81400F2C64F /* swift-appTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -163,8 +164,6 @@
 				18B9A3332EDCC81400F2C64F /* UITests */,
 			);
 			name = "swift-appUITests";
-			packageProductDependencies = (
-			);
 			productName = "swift-appUITests";
 			productReference = 18B9A3302EDCC81400F2C64F /* swift-appUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -238,6 +237,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8493B2FDD81548C702E6729C /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif command -v swiftlint > /dev/null 2>&1; then\n  swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not found. Install via: brew install swiftlint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		18B9A3132EDCC81300F2C64F /* Sources */ = {
@@ -413,6 +433,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "swift-app";
@@ -460,6 +481,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "swift-app";

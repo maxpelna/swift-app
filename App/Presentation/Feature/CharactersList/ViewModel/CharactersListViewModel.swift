@@ -39,7 +39,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
 
     enum Event {
         case initialLoad
-        case loadMode
+        case loadMore
         case clearLoadMore
         case setSearchQuery(String)
         case setFilters(CharacterGender?, CharacterStatus?)
@@ -51,7 +51,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         Task {
             switch event {
             case .initialLoad: await initialLoad()
-            case .loadMode: await loadMore()
+            case .loadMore: await loadMore()
             case .clearLoadMore: clearLoadMoreResult()
             case .setSearchQuery(let query): await setSearchQuery(query: query)
             case .setFilters(let gender, let status): await setFilters(gender: gender, status: status)
@@ -60,6 +60,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     }
 
     private func initialLoad() async {
+        guard !charactersResult.isInProgress && !charactersResult.isSuccessful else { return }
+
         charactersResult = .inProgress()
         page = 1
 

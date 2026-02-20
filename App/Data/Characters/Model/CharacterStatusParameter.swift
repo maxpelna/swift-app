@@ -8,14 +8,14 @@
 import Foundation
 
 enum CharacterStatusParameter: String, Codable {
-    case Alive
-    case Dead
-    case Unknown
+    case alive
+    case dead
+    case unknown
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let value = try container.decode(String.self).lowercased()
-        self = CharacterStatusParameter(rawValue: value) ?? .Unknown
+        let value = try container.decode(String.self)
+        self = CharacterStatusParameter(rawValue: value) ?? .unknown
     }
 
     init?(from domain: CharacterStatus?) {
@@ -23,21 +23,21 @@ enum CharacterStatusParameter: String, Codable {
 
         switch domain {
         case .alive:
-            self = .Alive
+            self = .alive
         case .dead:
-            self = .Dead
+            self = .dead
         case .unknown:
-            self = .Unknown
+            self = .unknown
         }
     }
 
     func toDomain() -> CharacterStatus {
         switch self {
-        case .Alive:
+        case .alive:
             return .alive
-        case .Dead:
+        case .dead:
             return .dead
-        case .Unknown:
+        case .unknown:
             return .unknown
         }
     }
