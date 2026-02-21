@@ -9,7 +9,7 @@ import Foundation
 
 final class ErrorReportingService: PErrorReportingService {
     func recordNonFatalError(_ error: Error) {
-        // TODO: Forward to crash reporting provider
+        // Forward to crash reporting provider
         // e.g. Crashlytics.crashlytics().record(error: error)
     }
 }

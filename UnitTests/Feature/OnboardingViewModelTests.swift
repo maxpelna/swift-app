@@ -8,24 +8,25 @@
 import Testing
 @testable import swift_app
 
-@MainActor
-@Suite(.serialized)
-struct OnboardingViewModelTests {
-    private func makeViewModel(stats: MockPUserStatsService) -> OnboardingViewModel {
-        DIContainer.shared.userStatsService = stats
-        return OnboardingViewModel()
-    }
+extension ViewModelTestsSuite {
+    @MainActor
+    struct OnboardingViewModelTests {
+        private func makeViewModel(stats: MockPUserStatsService) -> OnboardingViewModel {
+            DIContainer.shared.userStatsService = stats
+            return OnboardingViewModel()
+        }
 
-    @Test
-    func finishOnboarding_marksOnboardingFinished() {
-        let stats = MockPUserStatsService()
-        let vm = makeViewModel(stats: stats)
+        @Test
+        func finishOnboarding_marksOnboardingFinished() {
+            let stats = MockPUserStatsService()
+            let vm = makeViewModel(stats: stats)
 
-        #expect(!stats.isOnboardingFinished)
+            #expect(!stats.isOnboardingFinished)
 
-        vm.addEvent(.finishOnboarding)
+            vm.addEvent(.finishOnboarding)
 
-        #expect(stats.isOnboardingFinished)
-        #expect(stats.setOnboardingCallCount == 1)
+            #expect(stats.isOnboardingFinished)
+            #expect(stats.setOnboardingCallCount == 1)
+        }
     }
 }

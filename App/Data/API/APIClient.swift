@@ -8,6 +8,19 @@
 import Foundation
 
 final class APIClient: PAPIClient {
+    // MARK: - Retry policy
+
+    private enum RetryPolicy {
+        static let maxAttempts = 3
+        static let baseDelay: Double = 1.0
+
+        static func delay(for attempt: Int) -> Double {
+            baseDelay * Double(attempt)
+        }
+    }
+
+    // MARK: - Properties
+
     private let session: URLSession
     private let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -15,9 +28,13 @@ final class APIClient: PAPIClient {
         return decoder
     }()
 
+    // MARK: - Init
+
     init(session: URLSession = APIClient.makeDefaultSession()) {
         self.session = session
     }
+
+    // MARK: - Type methods
 
     private static func makeDefaultSession() -> URLSession {
         let config = URLSessionConfiguration.default
@@ -27,6 +44,8 @@ final class APIClient: PAPIClient {
         config.urlCache = URLCache(memoryCapacity: 4_000_000, diskCapacity: 20_000_000)
         return URLSession(configuration: config)
     }
+
+    // MARK: - Public methods
 
     func request<T: APIEndpoint>(_ endpoint: T) async throws -> T.Response {
         guard let url = endpoint.url else {
@@ -38,17 +57,8 @@ final class APIClient: PAPIClient {
 
         return try await requestWithRetry(urlRequest)
     }
-
-    // MARK: - Retry
-
-    private enum RetryPolicy {
-        static let maxAttempts = 3
-        static let baseDelay: Double = 1.0
-
-        static func delay(for attempt: Int) -> Double {
-            baseDelay * Double(attempt)
-        }
-    }
+    
+    // MARK: - Private methods
 
     private func requestWithRetry<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
         var lastError: APIError = .unknown(URLError(.unknown))

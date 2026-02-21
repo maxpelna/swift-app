@@ -48,7 +48,7 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
 
     private func startApp() async {
         potentiallyClearAllStorageAfterReinstall()
-        
+
         // Just a dummy timer to show splash view. In real app there can be multiple checks
         // e.g. if token exists, if launched with deep link, if should show pin code.
         try? await Task.sleep(for: .seconds(1))

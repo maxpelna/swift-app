@@ -141,8 +141,6 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             charactersResult = .fromValue(result.characters)
             canLoadMore = result.hasNextPage
         } catch is CancellationError {
-            // Task was cancelled intentionally by a newer addEvent call.
-            // Reset to idle so the next task's initialLoad guard can pass.
             charactersResult = .none()
         } catch {
             charactersResult = .fromError(error)

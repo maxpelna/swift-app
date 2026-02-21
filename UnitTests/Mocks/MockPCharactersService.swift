@@ -31,6 +31,8 @@ final class MockPCharactersService: PCharactersService {
         lastStatus = status
         lastGender = gender
 
+        await Task.yield()
+
         if let error = stubbedError { throw error }
         return stubbedResult
     }
