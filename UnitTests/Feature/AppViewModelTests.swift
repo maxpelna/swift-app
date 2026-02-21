@@ -11,12 +11,19 @@ import Testing
 @MainActor
 @Suite(.serialized)
 struct AppViewModelTests {
+    init() {
+        DIContainer.shared.userStatsService = MockPUserStatsService()
+        DIContainer.shared.connectivityService = MockPConnectivityService()
+        DIContainer.shared.keychainService = MockPKeychainService()
+    }
+
     private func makeViewModel(
         stats: MockPUserStatsService,
         connectivity: MockPConnectivityService = MockPConnectivityService()
     ) -> AppViewModel {
         DIContainer.shared.userStatsService = stats
         DIContainer.shared.connectivityService = connectivity
+        DIContainer.shared.keychainService = MockPKeychainService()
         return AppViewModel()
     }
 

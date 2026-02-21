@@ -1,0 +1,4 @@
+// Release configuration
+// To use: In Xcode → Project → Info → Configurations → Release, set this file for the swift-app target.
+
+BASE_URL = https://rickandmortyapi.com/api

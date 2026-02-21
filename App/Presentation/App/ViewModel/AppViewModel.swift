@@ -9,7 +9,7 @@ import Observation
 import Combine
 
 @Observable
-final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable {
+final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable, KeychainServiceInjectable {
     // MARK: - Event
 
     enum Event {
@@ -28,8 +28,8 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     private(set) var appTheme: AppTheme = .system
     private(set) var isConnected = true
 
-    // MARK: - Sequential helper
-    
+    // MARK: - Task concern handlers
+
     @ObservationIgnored var currentTask: Task<Void, Never>?
     
     // MARK: - Handlers
@@ -46,8 +46,9 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     }
 
     private func startApp() async {
-        // Just a dummy timer to show splash view.
-        // In real app there can be multiple checkers.
+        // Just a dummy timer to show splash view. In real app there can be multiple checks
+        // e.g. if token exists, if launched with deep link, if should show pin code.
+        potentiallyClearAllStorageAfterReinstall()
         do {
             try await Task.sleep(for: .seconds(1))
         } catch { }
@@ -77,5 +78,12 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     private func setOriginalStates() {
         appState = userStatsService.getIsOnboardingFinished() ? .authorized : .clean
         appTheme = userStatsService.getAppTheme()
+    }
+    
+    private func potentiallyClearAllStorageAfterReinstall() {
+        if keychainService.isFirstInstall() {
+            userStatsService.resetAll()
+            keychainService.markInstalled()
+        }
     }
 }

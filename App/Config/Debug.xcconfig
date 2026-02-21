@@ -1,0 +1,4 @@
+// Debug configuration
+// To use: In Xcode → Project → Info → Configurations → Debug, set this file for the swift-app target.
+
+BASE_URL = https://rickandmortyapi.com/api

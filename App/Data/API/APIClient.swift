@@ -28,6 +28,7 @@ final class APIClient: PAPIClient {
         config.timeoutIntervalForRequest = 30
         config.timeoutIntervalForResource = 60
         config.waitsForConnectivity = true
+        config.urlCache = URLCache(memoryCapacity: 4_000_000, diskCapacity: 20_000_000)
         return URLSession(configuration: config)
     }
 

@@ -8,6 +8,6 @@
 import Foundation
 
 enum UserStatsKeys: String {
-    case isOnboardingFinished
-    case appTheme
+    case isOnboardingFinished = "com.mpelna.swift-app.isOnboardingFinished"
+    case appTheme = "com.mpelna.swift-app.appTheme"
 }

@@ -11,6 +11,10 @@ import Testing
 @MainActor
 @Suite(.serialized)
 struct CharactersListViewModelTests {
+    init() {
+        DIContainer.shared.charactersService = MockPCharactersService()
+    }
+
     private func makeViewModel(service: MockPCharactersService) -> CharactersListViewModel {
         DIContainer.shared.charactersService = service
         return CharactersListViewModel()

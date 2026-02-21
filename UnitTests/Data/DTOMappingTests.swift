@@ -163,8 +163,8 @@ private func decodeCharactersResultResponse(hasNext: Bool, characterCount: Int) 
         {
           "id": \(id),
           "name": "Character \(id)",
-          "status": "Alive",
-          "gender": "Male",
+          "status": "alive",
+          "gender": "male",
           "species": "Human",
           "type": "",
           "image": "https://example.com/\(id).jpg",

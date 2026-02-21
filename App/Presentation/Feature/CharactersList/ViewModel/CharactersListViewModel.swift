@@ -40,7 +40,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         !charactersResult.isInProgress && (charactersResult.value ?? []).isEmpty
     }
 
-    // MARK: - Sequential helper
+    // MARK: - Task concern handlers
     
     @ObservationIgnored var currentTask: Task<Void, Never>?
     

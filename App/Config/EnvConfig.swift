@@ -8,5 +8,7 @@
 import Foundation
 
 enum EnvConfig {
-    static let baseUrl = "https://rickandmortyapi.com/api"
+    static let baseUrl: String = {
+        Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "https://example.com/api"
+    }()
 }

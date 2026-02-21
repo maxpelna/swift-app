@@ -59,6 +59,16 @@ extension AnalyticsServiceInjectable {
     }
 }
 
+protocol KeychainServiceInjectable {
+    var keychainService: PKeychainService { get }
+}
+
+extension KeychainServiceInjectable {
+    var keychainService: PKeychainService {
+        DIContainer.shared.keychainService
+    }
+}
+
 // MARK: - DIContainer
 
 final class DIContainer {
@@ -82,6 +92,10 @@ final class DIContainer {
 
     lazy var analyticsService: PAnalyticsService = {
         AnalyticsService()
+    }()
+
+    lazy var keychainService: PKeychainService = {
+        KeychainService()
     }()
 
     private init() {}
