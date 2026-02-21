@@ -11,10 +11,6 @@ import Testing
 @MainActor
 @Suite(.serialized)
 struct CharactersListViewModelTests {
-    init() {
-        DIContainer.shared.charactersService = MockPCharactersService()
-    }
-
     private func makeViewModel(service: MockPCharactersService) -> CharactersListViewModel {
         DIContainer.shared.charactersService = service
         return CharactersListViewModel()
@@ -366,5 +362,67 @@ struct CharactersListViewModelTests {
 
         #expect(!vm.canLoadMore(99))
         #expect(!vm.canLoadMore(1))
+    }
+
+    @Test
+    func setSearchQuery_updatesSearchQueryState() async {
+        let mock = MockPCharactersService()
+        mock.stubbedResult = CharactersResult(characters: [], hasNextPage: false)
+
+        let vm = makeViewModel(service: mock)
+        vm.addEvent(.setSearchQuery("Rick"))
+        await vm.currentTask?.value
+
+        #expect(vm.searchQuery == "Rick")
+    }
+
+    @Test
+    func setFilters_resetsPageToOne() async {
+        let mock = MockPCharactersService()
+        mock.stubbedResult = CharactersResult(
+            characters: [.stub(id: 1)],
+            hasNextPage: true
+        )
+
+        let vm = makeViewModel(service: mock)
+        vm.addEvent(.initialLoad)
+        await vm.currentTask?.value
+
+        mock.stubbedResult = CharactersResult(
+            characters: [.stub(id: 2)],
+            hasNextPage: true
+        )
+        vm.addEvent(.loadMore)
+        await vm.currentTask?.value
+
+        mock.stubbedResult = CharactersResult(characters: [], hasNextPage: false)
+        vm.addEvent(.setFilters(.female, nil))
+        await vm.currentTask?.value
+
+        #expect(mock.lastPage == 1)
+    }
+
+    @Test
+    func loadMore_passesCurrentSearchAndFiltersToService() async {
+        let mock = MockPCharactersService()
+        mock.stubbedResult = CharactersResult(
+            characters: [.stub(id: 1)],
+            hasNextPage: true
+        )
+
+        let vm = makeViewModel(service: mock)
+        vm.addEvent(.setFilters(.female, .alive))
+        await vm.currentTask?.value
+
+        vm.addEvent(.setSearchQuery("Rick"))
+        await vm.currentTask?.value
+
+        mock.stubbedResult = CharactersResult(characters: [.stub(id: 2)], hasNextPage: false)
+        vm.addEvent(.loadMore)
+        await vm.currentTask?.value
+
+        #expect(mock.lastName == "Rick")
+        #expect(mock.lastGender == .female)
+        #expect(mock.lastStatus == .alive)
     }
 }

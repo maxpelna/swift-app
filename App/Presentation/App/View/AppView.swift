@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AppView: View {
     @State private var coordinator = Coordinator()
+    @State private var errorHandler = ErrorHandler()
+    @State private var analyticsLogger = AnalyticsLogger()
     @State private var viewModel = AppViewModel()
 
     var body: some View {
@@ -39,5 +41,7 @@ struct AppView: View {
             triggerThemeChange(newValue)
         }
         .environment(\.coordinator, coordinator)
+        .environment(\.errorHandler, errorHandler)
+        .environment(\.analyticsLogger, analyticsLogger)
     }
 }

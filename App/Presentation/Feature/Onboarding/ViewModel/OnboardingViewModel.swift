@@ -7,12 +7,23 @@
 
 import Observation
 
+@MainActor
 @Observable
 final class OnboardingViewModel: UserStatsServiceInjectable {
     // MARK: - Event
 
     enum Event {
         case finishOnboarding
+    }
+
+    // MARK: - Dependencies
+
+    let userStatsService: PUserStatsService
+
+    // MARK: - Init
+
+    init(userStatsService: PUserStatsService = DIContainer.shared.userStatsService) {
+        self.userStatsService = userStatsService
     }
 
     // MARK: - Handlers

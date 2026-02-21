@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "swift-app", category: "APIClient")
+private let logger = Logger(subsystem: EnvConfig.bundleId, category: "APIClient")
 
 extension APIClient {
     func log(_ data: Data?, _ response: URLResponse?) {
@@ -20,10 +20,14 @@ extension APIClient {
     }
 
     func logServerError(statusCode: Int, description: String?) {
+        #if DEBUG
         logger.error("API server error: HTTP \(statusCode)\(description.map { " — \($0)" } ?? "")")
+        #endif
     }
 
     func logDecodingError(_ error: any Error) {
+        #if DEBUG
         logger.error("API decoding error: \(error)")
+        #endif
     }
 }

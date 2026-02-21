@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol PAPIClient {
-    func request<T: APIEndpoint>(_ endpoint: T) async throws -> T.Response
-}
-
 final class APIClient: PAPIClient {
     private let session: URLSession
     private let decoder: JSONDecoder = {

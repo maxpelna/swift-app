@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct ThemePickerView: View {
+struct ThemePickerSheet: View {
     let viewConfig: ThemePickerViewConfig
+
+    @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -41,10 +43,13 @@ struct ThemePickerView: View {
             }
         }
         .padding()
+        .onAppear {
+            feedbackGenerator.prepare()
+        }
     }
 
     private func onSelectTheme(_ theme: AppTheme) {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        feedbackGenerator.impactOccurred()
         viewConfig.onChangeTheme(theme)
     }
 }

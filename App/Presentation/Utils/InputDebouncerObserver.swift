@@ -1,5 +1,5 @@
 //
-//  InputDebounceObserver.swift
+//  InputDebouncerObserver.swift
 //  swift-app
 //
 //  Created by Maksims Pelna on 26/12/2025.
@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 @MainActor
-final class InputDebounceObserver: ObservableObject {
+final class InputDebouncerObserver: ObservableObject {
     @Published var input = ""
     @Published private(set) var output = ""
 

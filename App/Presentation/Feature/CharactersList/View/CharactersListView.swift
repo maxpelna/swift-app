@@ -9,9 +9,8 @@ import SwiftUI
 
 struct CharactersListView: View {
     @State private var viewModel = CharactersListViewModel()
-    @State private var showFilters: Bool = false
 
-    @StateObject private var debounceObserver = InputDebounceObserver()
+    @StateObject private var debounceObserver = InputDebouncerObserver()
 
     @Environment(\.coordinator)
     private var coordinator

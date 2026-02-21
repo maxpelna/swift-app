@@ -12,8 +12,8 @@ struct CharactersListItem: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            if let imageURL = URL(string: character.image) {
-                AsyncImage(url: imageURL) { image in
+            if !character.image.isEmpty {
+                CachedAsyncImage(url: character.image) { image in
                     image
                         .resizable()
                         .scaledToFill()

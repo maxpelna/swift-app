@@ -65,7 +65,7 @@ final class Coordinator {
                 .presentationDragIndicator(.visible)
 
         case .appThemePicker(let viewConfig):
-            ThemePickerView(viewConfig: viewConfig)
+            ThemePickerSheet(viewConfig: viewConfig)
                 .presentationDetents([.height(320)])
                 .presentationDragIndicator(.visible)
         }

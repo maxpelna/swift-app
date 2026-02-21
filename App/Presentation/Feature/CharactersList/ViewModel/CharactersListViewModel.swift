@@ -7,6 +7,7 @@
 
 import Observation
 
+@MainActor
 @Observable
 final class CharactersListViewModel: CharactersServiceInjectable {
     // MARK: - Event
@@ -41,9 +42,9 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     }
 
     // MARK: - Task concern handlers
-    
+
     @ObservationIgnored var currentTask: Task<Void, Never>?
-    
+
     // MARK: - Handlers
 
     func canLoadMore(_ id: Int) -> Bool {
@@ -147,4 +148,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             charactersResult = .fromError(error)
         }
     }
+
+    // MARK: - Deinit
+
+    deinit { currentTask?.cancel() }
 }

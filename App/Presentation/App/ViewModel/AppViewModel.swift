@@ -8,6 +8,7 @@
 import Observation
 import Combine
 
+@MainActor
 @Observable
 final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable, KeychainServiceInjectable {
     // MARK: - Event
@@ -31,7 +32,7 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     // MARK: - Task concern handlers
 
     @ObservationIgnored var currentTask: Task<Void, Never>?
-    
+
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {
@@ -86,4 +87,8 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
             keychainService.markInstalled()
         }
     }
+
+    // MARK: - Deinit
+
+    deinit { currentTask?.cancel() }
 }

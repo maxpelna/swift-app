@@ -11,19 +11,14 @@ import Testing
 @MainActor
 @Suite(.serialized)
 struct AppViewModelTests {
-    init() {
-        DIContainer.shared.userStatsService = MockPUserStatsService()
-        DIContainer.shared.connectivityService = MockPConnectivityService()
-        DIContainer.shared.keychainService = MockPKeychainService()
-    }
-
     private func makeViewModel(
         stats: MockPUserStatsService,
-        connectivity: MockPConnectivityService = MockPConnectivityService()
+        connectivity: MockPConnectivityService = MockPConnectivityService(),
+        keychain: MockPKeychainService = MockPKeychainService()
     ) -> AppViewModel {
         DIContainer.shared.userStatsService = stats
         DIContainer.shared.connectivityService = connectivity
-        DIContainer.shared.keychainService = MockPKeychainService()
+        DIContainer.shared.keychainService = keychain
         return AppViewModel()
     }
 
@@ -108,5 +103,45 @@ struct AppViewModelTests {
         connectivity.send(false)
 
         #expect(vm.isConnected == false)
+    }
+
+    @Test
+    func startApp_firstInstall_resetsStorageAndMarksInstalled() async {
+        let stats = MockPUserStatsService()
+        let keychain = MockPKeychainService()
+        keychain.firstInstallReturn = true
+        let vm = makeViewModel(stats: stats, keychain: keychain)
+
+        vm.addEvent(.startApp)
+        await vm.currentTask?.value
+
+        #expect(stats.resetAllCallCount == 1)
+        #expect(keychain.markInstalledCallCount == 1)
+    }
+
+    @Test
+    func startApp_returningUser_doesNotResetStorage() async {
+        let stats = MockPUserStatsService()
+        let keychain = MockPKeychainService()
+        keychain.firstInstallReturn = false
+        let vm = makeViewModel(stats: stats, keychain: keychain)
+
+        vm.addEvent(.startApp)
+        await vm.currentTask?.value
+
+        #expect(stats.resetAllCallCount == 0)
+        #expect(keychain.markInstalledCallCount == 0)
+    }
+
+    @Test
+    func startApp_setsAppStateAfterSplash() async {
+        let stats = MockPUserStatsService()
+        stats.isOnboardingFinished = true
+        let vm = makeViewModel(stats: stats)
+
+        vm.addEvent(.startApp)
+        await vm.currentTask?.value
+
+        #expect(vm.appState == .authorized)
     }
 }

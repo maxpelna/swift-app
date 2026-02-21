@@ -7,6 +7,7 @@
 
 import Observation
 
+@MainActor
 @Observable
 final class CharactersFiltersViewModel {
     // MARK: - Event

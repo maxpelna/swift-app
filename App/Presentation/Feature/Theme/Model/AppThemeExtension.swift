@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension AppTheme {
+    // MARK: - Localization
+
     var localizedTitle: String {
         switch self {
         case .light: return String(localized: .appThemeLight)
@@ -15,12 +17,12 @@ extension AppTheme {
         case .dark: return String(localized: .appThemeDark)
         }
     }
-}
 
-extension AppTheme {
+    // MARK: - Assets
+
     var image: Image {
         switch self {
-        case .system: return Image(.themeLightPhone)
+        case .system: return Image(.themeSystemPhone)
         case .dark: return Image(.themeDarkPhone)
         case .light: return Image(.themeLightPhone)
         }

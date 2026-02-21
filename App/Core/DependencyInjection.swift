@@ -71,6 +71,7 @@ extension KeychainServiceInjectable {
 
 // MARK: - DIContainer
 
+@MainActor
 final class DIContainer {
     static let shared = DIContainer()
 
@@ -101,14 +102,18 @@ final class DIContainer {
     private init() {}
 
     init(
+        apiClient: PAPIClient,
         charactersService: PCharactersService,
         connectivityService: PConnectivityService,
         userStatsService: PUserStatsService,
-        analyticsService: PAnalyticsService
+        analyticsService: PAnalyticsService,
+        keychainService: PKeychainService
     ) {
+        self.apiClient = apiClient
         self.charactersService = charactersService
         self.connectivityService = connectivityService
         self.userStatsService = userStatsService
         self.analyticsService = analyticsService
+        self.keychainService = keychainService
     }
 }
