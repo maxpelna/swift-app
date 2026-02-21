@@ -10,6 +10,8 @@ import UIKit
 final class ImageCache: @unchecked Sendable {
     static let shared = ImageCache()
 
+    private let ttl: TimeInterval = 24 * 60 * 60
+
     private let cache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
         cache.countLimit = 200
@@ -17,14 +19,42 @@ final class ImageCache: @unchecked Sendable {
         return cache
     }()
 
+    private var timestamps: [NSString: Date] = [:]
+    private let lock = NSLock()
+
     private init() {}
 
     func image(for url: URL) -> UIImage? {
-        cache.object(forKey: url.absoluteString as NSString)
+        let key = url.absoluteString as NSString
+
+        lock.lock()
+        let storedAt = timestamps[key]
+        lock.unlock()
+
+        guard let storedAt, Date().timeIntervalSince(storedAt) < ttl else {
+            removeImage(for: url)
+            return nil
+        }
+
+        return cache.object(forKey: key)
     }
 
     func store(_ image: UIImage, for url: URL) {
+        let key = url.absoluteString as NSString
         let cost = Int(image.size.width * image.size.height * image.scale * 4)
-        cache.setObject(image, forKey: url.absoluteString as NSString, cost: cost)
+        cache.setObject(image, forKey: key, cost: cost)
+
+        lock.lock()
+        timestamps[key] = Date()
+        lock.unlock()
+    }
+
+    func removeImage(for url: URL) {
+        let key = url.absoluteString as NSString
+        cache.removeObject(forKey: key)
+
+        lock.lock()
+        timestamps.removeValue(forKey: key)
+        lock.unlock()
     }
 }

@@ -20,6 +20,7 @@ final class KeychainService: PKeychainService {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
         let status = SecItemCopyMatching(query as CFDictionary, nil)
@@ -31,6 +32,7 @@ final class KeychainService: PKeychainService {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
             kSecValueData as String: Data([1])
         ]
         SecItemAdd(query as CFDictionary, nil)

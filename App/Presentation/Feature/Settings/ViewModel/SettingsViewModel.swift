@@ -18,19 +18,9 @@ final class SettingsViewModel: UserStatsServiceInjectable {
         case resetStats
     }
 
-    // MARK: - Dependencies
-
-    let userStatsService: PUserStatsService
-
     // MARK: - State
 
     private(set) var selectedTheme: AppTheme = .system
-
-    // MARK: - Init
-
-    init(userStatsService: PUserStatsService = DIContainer.shared.userStatsService) {
-        self.userStatsService = userStatsService
-    }
 
     // MARK: - Handlers
 

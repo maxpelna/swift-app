@@ -5,8 +5,8 @@
 //  Created by Maksims Pelna on 26/12/2025.
 //
 
-import Observation
 import Combine
+import Observation
 
 @MainActor
 @Observable
@@ -47,12 +47,11 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     }
 
     private func startApp() async {
+        potentiallyClearAllStorageAfterReinstall()
+        
         // Just a dummy timer to show splash view. In real app there can be multiple checks
         // e.g. if token exists, if launched with deep link, if should show pin code.
-        potentiallyClearAllStorageAfterReinstall()
-        do {
-            try await Task.sleep(for: .seconds(1))
-        } catch { }
+        try? await Task.sleep(for: .seconds(1))
 
         setOriginalStates()
     }
@@ -80,7 +79,7 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
         appState = userStatsService.getIsOnboardingFinished() ? .authorized : .clean
         appTheme = userStatsService.getAppTheme()
     }
-    
+
     private func potentiallyClearAllStorageAfterReinstall() {
         if keychainService.isFirstInstall() {
             userStatsService.resetAll()

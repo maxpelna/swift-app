@@ -12,6 +12,9 @@ struct AppView: View {
     @State private var errorHandler = ErrorHandler()
     @State private var analyticsLogger = AnalyticsLogger()
     @State private var viewModel = AppViewModel()
+    
+    @Environment(\.scenePhase)
+    private var scenePhase
 
     var body: some View {
         NavigationStack(path: $coordinator.path) {
@@ -39,6 +42,12 @@ struct AppView: View {
         }
         .onChange(of: viewModel.appTheme) { _, newValue in
             triggerThemeChange(newValue)
+        }
+        .overlay {
+            if scenePhase != .active {
+                SplashView()
+                    .ignoresSafeArea()
+            }
         }
         .environment(\.coordinator, coordinator)
         .environment(\.errorHandler, errorHandler)

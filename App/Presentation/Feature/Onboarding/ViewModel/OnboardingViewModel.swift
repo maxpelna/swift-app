@@ -16,16 +16,6 @@ final class OnboardingViewModel: UserStatsServiceInjectable {
         case finishOnboarding
     }
 
-    // MARK: - Dependencies
-
-    let userStatsService: PUserStatsService
-
-    // MARK: - Init
-
-    init(userStatsService: PUserStatsService = DIContainer.shared.userStatsService) {
-        self.userStatsService = userStatsService
-    }
-
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {

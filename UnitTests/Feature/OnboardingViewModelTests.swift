@@ -12,7 +12,8 @@ import Testing
 @Suite(.serialized)
 struct OnboardingViewModelTests {
     private func makeViewModel(stats: MockPUserStatsService) -> OnboardingViewModel {
-        OnboardingViewModel(userStatsService: stats)
+        DIContainer.shared.userStatsService = stats
+        return OnboardingViewModel()
     }
 
     @Test
