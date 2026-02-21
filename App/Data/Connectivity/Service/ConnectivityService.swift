@@ -17,7 +17,9 @@ final class ConnectivityService: PConnectivityService {
 
     init() {
         networkMonitor.pathUpdateHandler = { [weak self] path in
-            self?._connectivityStatus.send(path.status == .satisfied)
+            Task { @MainActor [weak self] in
+                self?._connectivityStatus.send(path.status == .satisfied)
+            }
         }
         networkMonitor.start(queue: workerQueue)
     }

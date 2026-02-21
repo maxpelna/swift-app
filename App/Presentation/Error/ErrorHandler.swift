@@ -8,16 +8,21 @@
 import Foundation
 import Observation
 
+@MainActor
 @Observable
 final class ErrorHandler {
     private(set) var errorMessage: String?
+
+    @ObservationIgnored private var dismissTask: Task<Void, Never>?
 
     func showErrorMessage(_ error: Error?) {
         guard let error else { return }
 
         errorMessage = localizeError(error)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            self?.errorMessage = nil
+        dismissTask?.cancel()
+        dismissTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            errorMessage = nil
         }
     }
 

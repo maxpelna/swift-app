@@ -12,7 +12,7 @@ enum CharacterStatusParameter: String, Codable {
     case dead
     case unknown
 
-    init(from decoder: Decoder) throws {
+    nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)
         self = CharacterStatusParameter(rawValue: value) ?? .unknown

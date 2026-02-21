@@ -9,6 +9,16 @@ import Foundation
 
 // MARK: - Protocols
 
+protocol APIClientInjectable {
+    var apiClient: PAPIClient { get }
+}
+
+extension APIClientInjectable {
+    var apiClient: PAPIClient {
+        DIContainer.shared.apiClient
+    }
+}
+
 protocol CharactersServiceInjectable {
     var charactersService: PCharactersService { get }
 }
@@ -51,10 +61,10 @@ extension AnalyticsServiceInjectable {
 
 // MARK: - DIContainer
 
-private final class DIContainer {
+final class DIContainer {
     static let shared = DIContainer()
 
-    lazy var apiClient: APIClient = {
+    lazy var apiClient: PAPIClient = {
         APIClient()
     }()
 
@@ -73,4 +83,18 @@ private final class DIContainer {
     lazy var analyticsService: PAnalyticsService = {
         AnalyticsService()
     }()
+
+    private init() {}
+
+    init(
+        charactersService: PCharactersService,
+        connectivityService: PConnectivityService,
+        userStatsService: PUserStatsService,
+        analyticsService: PAnalyticsService
+    ) {
+        self.charactersService = charactersService
+        self.connectivityService = connectivityService
+        self.userStatsService = userStatsService
+        self.analyticsService = analyticsService
+    }
 }

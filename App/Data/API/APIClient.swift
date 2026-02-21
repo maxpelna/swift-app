@@ -7,7 +7,30 @@
 
 import Foundation
 
-final class APIClient {
+protocol PAPIClient {
+    func request<T: APIEndpoint>(_ endpoint: T) async throws -> T.Response
+}
+
+final class APIClient: PAPIClient {
+    private let session: URLSession
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
+
+    init(session: URLSession = APIClient.makeDefaultSession()) {
+        self.session = session
+    }
+
+    private static func makeDefaultSession() -> URLSession {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForResource = 60
+        config.waitsForConnectivity = true
+        return URLSession(configuration: config)
+    }
+
     func request<T: APIEndpoint>(_ endpoint: T) async throws -> T.Response {
         guard let url = endpoint.url else {
             throw APIError.invalidUrl
@@ -18,7 +41,7 @@ final class APIClient {
 
         let (data, response): (Data, URLResponse)
         do {
-            (data, response) = try await URLSession.shared.data(for: urlRequest)
+            (data, response) = try await session.data(for: urlRequest)
             log(data, response)
         } catch {
             throw APIError.unknown(error)
@@ -27,9 +50,6 @@ final class APIClient {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.unknown(NSError(domain: "Invalid response", code: 0))
         }
-
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
 
         guard (200..<300).contains(httpResponse.statusCode) else {
             var errorDescriptionFromAPI: String?

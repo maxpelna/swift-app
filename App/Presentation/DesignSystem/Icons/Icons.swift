@@ -9,7 +9,7 @@ import SwiftUI
 
 enum Icons {
     static let search = "magnifyingglass"
-    static let slash = "line.diagonal"
+    static let splash = "bonjour"
     static let noNetworkConnection = "wifi.slash"
     static let filter = "line.3.horizontal.decrease"
     static let settings = "gearshape"

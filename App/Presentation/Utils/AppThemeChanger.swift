@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension View {
+    @MainActor
     func triggerThemeChange(_ theme: AppTheme) {
         if let window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.keyWindow {
             if theme == AppTheme.dark {

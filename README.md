@@ -65,3 +65,4 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 - UI tests
 - Unit tests
 - Flavors
+- Investigate SwiftLint

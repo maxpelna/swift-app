@@ -24,6 +24,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     private var page: Int = 1
     private var canLoadMore: Bool = false
 
+    @ObservationIgnored private var currentTask: Task<Void, Never>?
+
     // MARK: - State
 
     private(set) var charactersResult: DelayedResult<[CharacterEntity]> = DelayedResult.none()
@@ -47,12 +49,17 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     }
 
     func addEvent(_ event: Event) {
-        Task {
+        currentTask?.cancel()
+        currentTask = Task {
             switch event {
             case .initialLoad: await initialLoad()
+
             case .loadMore: await loadMore()
+
             case .clearLoadMore: clearLoadMoreResult()
+
             case let .setSearchQuery(query): await setSearchQuery(query: query)
+
             case let .setFilters(gender, status): await setFilters(gender: gender, status: status)
             }
         }
@@ -83,15 +90,16 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         guard !loadMoreResult.isInProgress && canLoadMore else { return }
 
         loadMoreResult = .inProgress()
-        page += 1
 
         do {
             let result = try await charactersService.charactersResult(
-                page: page,
+                page: page + 1,
                 name: searchQuery,
                 status: selectedStatus,
                 gender: selectedGender
             )
+
+            page += 1
 
             var updatedCharactersList = [CharacterEntity]()
             updatedCharactersList.append(contentsOf: charactersResult.value ?? [])

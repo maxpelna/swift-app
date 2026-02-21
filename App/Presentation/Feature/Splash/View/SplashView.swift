@@ -16,7 +16,7 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             VStack {
-                Image(systemName: Icons.slash)
+                Image(systemName: Icons.splash)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundStyle(.tint)

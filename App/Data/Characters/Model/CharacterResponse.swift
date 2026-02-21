@@ -18,6 +18,23 @@ struct CharacterResponse: Decodable {
     let episode: [String]
     let created: Date
 
+    nonisolated init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        status = try container.decodeIfPresent(CharacterStatusParameter.self, forKey: .status)
+        gender = try container.decodeIfPresent(CharacterGenderParameter.self, forKey: .gender)
+        species = try container.decode(String.self, forKey: .species)
+        type = try container.decode(String.self, forKey: .type)
+        image = try container.decode(String.self, forKey: .image)
+        episode = try container.decode([String].self, forKey: .episode)
+        created = try container.decode(Date.self, forKey: .created)
+    }
+
+    private enum CodingKeys: CodingKey {
+        case id, name, status, gender, species, type, image, episode, created
+    }
+
     func toDomain() -> CharacterEntity {
         return CharacterEntity(
             id: id,
