@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AppError: Error {
+enum AppError: Error, Equatable {
     case emptyState
     case networkUnavailable
     case serverError(statusCode: Int)

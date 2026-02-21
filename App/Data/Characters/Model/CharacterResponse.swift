@@ -8,6 +8,10 @@
 import Foundation
 
 struct CharacterResponse: Decodable {
+    private enum CodingKeys: CodingKey {
+        case id, name, status, gender, species, type, image, episode, created
+    }
+
     let id: Int
     let name: String
     let status: CharacterStatusParameter?
@@ -29,10 +33,6 @@ struct CharacterResponse: Decodable {
         image = try container.decode(String.self, forKey: .image)
         episode = try container.decode([String].self, forKey: .episode)
         created = try container.decode(Date.self, forKey: .created)
-    }
-
-    private enum CodingKeys: CodingKey {
-        case id, name, status, gender, species, type, image, episode, created
     }
 
     func toDomain() -> CharacterEntity {

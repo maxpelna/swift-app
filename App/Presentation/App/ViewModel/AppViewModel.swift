@@ -28,10 +28,15 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     private(set) var appTheme: AppTheme = .system
     private(set) var isConnected = true
 
+    // MARK: - Sequential helper
+    
+    @ObservationIgnored var currentTask: Task<Void, Never>?
+    
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {
-        Task {
+        currentTask?.cancel()
+        currentTask = Task {
             switch event {
             case .startApp: await startApp()
             case .listenStats: listenStats()

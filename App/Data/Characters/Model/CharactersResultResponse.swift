@@ -8,17 +8,17 @@
 import Foundation
 
 struct CharactersResultResponse: Decodable {
-    let results: [CharacterResponse]
+    private enum CodingKeys: CodingKey {
+        case results, info
+    }
+
     private let info: CharacterInfoResponse
+    let results: [CharacterResponse]
 
     nonisolated init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         results = try container.decode([CharacterResponse].self, forKey: .results)
         info = try container.decode(CharacterInfoResponse.self, forKey: .info)
-    }
-
-    private enum CodingKeys: CodingKey {
-        case results, info
     }
 
     func toDomain() -> CharactersResult {
@@ -30,14 +30,14 @@ struct CharactersResultResponse: Decodable {
 }
 
 private struct CharacterInfoResponse: Decodable {
+    private enum CodingKeys: CodingKey {
+        case next
+    }
+
     let next: String?
 
     nonisolated init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         next = try container.decodeIfPresent(String.self, forKey: .next)
-    }
-
-    private enum CodingKeys: CodingKey {
-        case next
     }
 }

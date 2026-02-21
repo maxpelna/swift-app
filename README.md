@@ -62,7 +62,6 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 
 ## TODO:
 
-- UI tests
-- Unit tests
+- Add additional SwiftLint rules
 - Flavors
-- Investigate SwiftLint
+- Snapshot tests?

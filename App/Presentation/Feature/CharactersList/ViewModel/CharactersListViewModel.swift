@@ -24,8 +24,6 @@ final class CharactersListViewModel: CharactersServiceInjectable {
     private var page: Int = 1
     private var canLoadMore: Bool = false
 
-    @ObservationIgnored private var currentTask: Task<Void, Never>?
-
     // MARK: - State
 
     private(set) var charactersResult: DelayedResult<[CharacterEntity]> = DelayedResult.none()
@@ -42,10 +40,14 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         !charactersResult.isInProgress && (charactersResult.value ?? []).isEmpty
     }
 
+    // MARK: - Sequential helper
+    
+    @ObservationIgnored var currentTask: Task<Void, Never>?
+    
     // MARK: - Handlers
 
     func canLoadMore(_ id: Int) -> Bool {
-        !loadMoreResult.isInProgress && charactersResult.value?.last?.id == id
+        !loadMoreResult.isInProgress && canLoadMore == true && charactersResult.value?.last?.id == id
     }
 
     func addEvent(_ event: Event) {
