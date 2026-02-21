@@ -20,7 +20,7 @@ struct CharactersListView: View {
     private var errorHandler
 
     var body: some View {
-        LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress) {
+        LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress || viewModel.charactersResult.isNone) {
             if viewModel.isEmptyList {
                 CharactersEmptyView()
             } else {

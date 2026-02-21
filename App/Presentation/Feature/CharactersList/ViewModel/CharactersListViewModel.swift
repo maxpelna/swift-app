@@ -72,20 +72,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
 
         charactersResult = .inProgress()
         page = 1
-
-        do {
-            let result = try await charactersService.charactersResult(
-                page: page,
-                name: searchQuery,
-                status: selectedStatus,
-                gender: selectedGender
-            )
-
-            charactersResult = .fromValue(result.characters)
-            canLoadMore = result.hasNextPage
-        } catch {
-            charactersResult = .fromError(error)
-        }
+        await fetchCharacters()
     }
 
     private func loadMore() async {
@@ -110,6 +97,8 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             charactersResult = .fromValue(updatedCharactersList)
             canLoadMore = result.hasNextPage
             loadMoreResult = .none()
+        } catch is CancellationError {
+            loadMoreResult = .none()
         } catch {
             loadMoreResult = .fromError(error)
         }
@@ -125,20 +114,7 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         charactersResult = .inProgress()
         page = 1
         searchQuery = query
-
-        do {
-            let result = try await charactersService.charactersResult(
-                page: page,
-                name: searchQuery,
-                status: selectedStatus,
-                gender: selectedGender
-            )
-
-            charactersResult = .fromValue(result.characters)
-            canLoadMore = result.hasNextPage
-        } catch {
-            charactersResult = .fromError(error)
-        }
+        await fetchCharacters()
     }
 
     private func setFilters(
@@ -149,7 +125,10 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         page = 1
         selectedGender = gender
         selectedStatus = status
+        await fetchCharacters()
+    }
 
+    private func fetchCharacters() async {
         do {
             let result = try await charactersService.charactersResult(
                 page: page,
@@ -160,6 +139,10 @@ final class CharactersListViewModel: CharactersServiceInjectable {
 
             charactersResult = .fromValue(result.characters)
             canLoadMore = result.hasNextPage
+        } catch is CancellationError {
+            // Task was cancelled intentionally by a newer addEvent call.
+            // Reset to idle so the next task's initialLoad guard can pass.
+            charactersResult = .none()
         } catch {
             charactersResult = .fromError(error)
         }

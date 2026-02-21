@@ -10,6 +10,8 @@ import Foundation
 // User events would be translated to 3rd party services in this class in real app.
 final class AnalyticsService: PAnalyticsService {
     func log(_ event: AnalyticsEvent) {
+        #if DEBUG
         print("🤝🤝🤝 Received analytics event: \(event) 🤝🤝🤝")
+        #endif
     }
 }

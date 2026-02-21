@@ -60,9 +60,11 @@ final class APIClient: PAPIClient {
 
                 errorDescriptionFromAPI = errorData.error
             } catch {
+                logServerError(statusCode: httpResponse.statusCode, description: nil)
                 throw APIError.server(statusCode: httpResponse.statusCode, description: nil)
             }
 
+            logServerError(statusCode: httpResponse.statusCode, description: errorDescriptionFromAPI)
             throw APIError.server(statusCode: httpResponse.statusCode, description: errorDescriptionFromAPI)
         }
 
@@ -71,6 +73,7 @@ final class APIClient: PAPIClient {
 
             return result
         } catch {
+            logDecodingError(error)
             throw APIError.decoding
         }
     }
