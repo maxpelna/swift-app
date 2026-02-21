@@ -30,4 +30,10 @@ extension APIClient {
         logger.error("API decoding error: \(error)")
         #endif
     }
+
+    func logRetry(attempt: Int, delay: Double) {
+        #if DEBUG
+        logger.debug("🔄 Retry attempt \(attempt) after \(String(format: "%.2f", delay))s")
+        #endif
+    }
 }

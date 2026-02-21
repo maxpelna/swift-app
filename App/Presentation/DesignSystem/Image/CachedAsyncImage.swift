@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// In read app should use library like Kingfisher or Nuke
 struct CachedAsyncImage<Content: View, Placeholder: View>: View {
     private let urlString: String
     private let content: (Image) -> Content
@@ -38,7 +39,7 @@ struct CachedAsyncImage<Content: View, Placeholder: View>: View {
     }
 
     private func load() async {
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString), url.scheme == "https" else { return }
 
         if let cached = ImageCache.shared.image(for: url) {
             uiImage = cached

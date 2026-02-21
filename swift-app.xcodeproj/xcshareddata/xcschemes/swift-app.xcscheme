@@ -41,17 +41,7 @@
                ReferencedContainer = "container:swift-app.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "18B9A32F2EDCC81400F2C64F"
-               BuildableName = "swift-appUITests.xctest"
-               BlueprintName = "swift-appUITests"
-               ReferencedContainer = "container:swift-app.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
+
       </Testables>
    </TestAction>
    <LaunchAction

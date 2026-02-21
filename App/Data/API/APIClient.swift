@@ -36,6 +36,42 @@ final class APIClient: PAPIClient {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = endpoint.method.rawValue
 
+        return try await requestWithRetry(urlRequest)
+    }
+
+    // MARK: - Retry
+
+    private enum RetryPolicy {
+        static let maxAttempts = 3
+        static let baseDelay: Double = 1.0
+
+        static func delay(for attempt: Int) -> Double {
+            baseDelay * Double(attempt)
+        }
+    }
+
+    private func requestWithRetry<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
+        var lastError: APIError = .unknown(URLError(.unknown))
+
+        for attempt in 0..<RetryPolicy.maxAttempts {
+            if attempt > 0 {
+                let delay = RetryPolicy.delay(for: attempt)
+                logRetry(attempt: attempt, delay: delay)
+                try await Task.sleep(for: .seconds(delay))
+            }
+
+            do {
+                return try await performRequest(urlRequest)
+            } catch let apiError as APIError {
+                guard apiError.isRetryable else { throw apiError }
+                lastError = apiError
+            }
+        }
+
+        throw lastError
+    }
+
+    private func performRequest<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
         let (data, response): (Data, URLResponse)
         do {
             (data, response) = try await session.data(for: urlRequest)
@@ -53,7 +89,6 @@ final class APIClient: PAPIClient {
 
             do {
                 let errorData = try decoder.decode(APIErrorData.self, from: data)
-
                 errorDescriptionFromAPI = errorData.error
             } catch {
                 logServerError(statusCode: httpResponse.statusCode, description: nil)
@@ -65,9 +100,7 @@ final class APIClient: PAPIClient {
         }
 
         do {
-            let result = try decoder.decode(T.Response.self, from: data)
-
-            return result
+            return try decoder.decode(Response.self, from: data)
         } catch {
             logDecodingError(error)
             throw APIError.decoding
