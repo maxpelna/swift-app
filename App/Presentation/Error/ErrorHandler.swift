@@ -10,7 +10,7 @@ import Observation
 
 @MainActor
 @Observable
-final class ErrorHandler {
+final class ErrorHandler: ErrorReportingServiceInjectable {
     private(set) var errorMessage: String?
 
     @ObservationIgnored private var dismissTask: Task<Void, Never>?
@@ -18,7 +18,13 @@ final class ErrorHandler {
     func showErrorMessage(_ error: Error?) {
         guard let error else { return }
 
-        errorMessage = localizeError(error)
+        let message = localizeError(error)
+        errorMessage = message
+
+        if message != nil {
+            errorReportingService.recordNonFatalError(error)
+        }
+
         dismissTask?.cancel()
         dismissTask = Task {
             try? await Task.sleep(for: .seconds(3))

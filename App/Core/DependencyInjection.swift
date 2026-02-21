@@ -69,6 +69,16 @@ extension KeychainServiceInjectable {
     }
 }
 
+protocol ErrorReportingServiceInjectable {
+    var errorReportingService: PErrorReportingService { get }
+}
+
+extension ErrorReportingServiceInjectable {
+    var errorReportingService: PErrorReportingService {
+        DIContainer.shared.errorReportingService
+    }
+}
+
 // MARK: - DIContainer
 
 @MainActor
@@ -99,6 +109,10 @@ final class DIContainer {
         KeychainService()
     }()
 
+    lazy var errorReportingService: PErrorReportingService = {
+        ErrorReportingService()
+    }()
+
     private init() {}
 
     init(
@@ -107,7 +121,8 @@ final class DIContainer {
         connectivityService: PConnectivityService,
         userStatsService: PUserStatsService,
         analyticsService: PAnalyticsService,
-        keychainService: PKeychainService
+        keychainService: PKeychainService,
+        errorReportingService: PErrorReportingService
     ) {
         self.apiClient = apiClient
         self.charactersService = charactersService
@@ -115,5 +130,6 @@ final class DIContainer {
         self.userStatsService = userStatsService
         self.analyticsService = analyticsService
         self.keychainService = keychainService
+        self.errorReportingService = errorReportingService
     }
 }
