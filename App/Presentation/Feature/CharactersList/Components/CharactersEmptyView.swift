@@ -10,13 +10,13 @@ import SwiftUI
 struct CharactersEmptyView: View {
     var body: some View {
         ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 26)
+            RoundedRectangle(cornerRadius: Radius.xLarge)
                 .fill(Color.backgroundSecondary)
                 .padding()
 
-            VStack(spacing: 24) {
+            VStack(spacing: Spacing.xxLarge) {
                 Image(systemName: Icons.search)
-                    .font(.system(size: 40))
+                    .font(.system(size: Size.iconLarge))
                     .symbolEffect(.breathe, options: .repeat(.continuous))
 
                 Text(.noCharactersFound)

@@ -128,8 +128,6 @@ large_tuple:
   error: 4
 
 excluded:
-  - Pods
-  - Carthage
   - .build
   - DerivedData
   - fastlane

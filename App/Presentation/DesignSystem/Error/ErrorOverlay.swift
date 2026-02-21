@@ -22,23 +22,22 @@ struct ErrorOverlay<Content: View>: View {
 
                         HStack {
                             Image(systemName: Icons.warning)
-                                .font(.system(size: 16))
+                                .font(.system(size: Size.iconSmall))
 
-                            Spacer().frame(width: 8)
+                            Spacer().frame(width: Spacing.small)
 
                             Text(message)
                                 .captionPrimary()
                         }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
+                        .padding(.vertical, Spacing.small)
+                        .padding(.horizontal, Spacing.medium)
                         .background(Color.backgroundDanger)
                         .clipShape(Capsule())
                         .padding()
-                        .padding(.bottom, 60)
                     }
                     .transition(
                         .opacity
-                            .animation(.spring(duration: 0.3))
+                            .animation(.spring(duration: Duration.transition))
                     )
                 }
             }

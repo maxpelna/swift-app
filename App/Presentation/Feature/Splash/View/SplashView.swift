@@ -22,10 +22,10 @@ struct SplashView: View {
                     .foregroundStyle(.tint)
                     .symbolEffect(
                         .drawOff.byLayer,
-                        options: .speed(0.05),
+                        options: .speed(Duration.micro),
                         isActive: isAnimating
                     )
-                    .padding(120)
+                    .padding(Spacing.massive)
             }
             .frame(maxHeight: .infinity, alignment: .center)
         }

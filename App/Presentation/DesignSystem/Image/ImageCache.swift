@@ -10,12 +10,19 @@ import UIKit
 final class ImageCache: @unchecked Sendable {
     static let shared = ImageCache()
 
-    private let ttl: TimeInterval = 24 * 60 * 60
+    private enum Constants {
+        static let ttl: TimeInterval = 24 * 60 * 60
+        static let countLimit = 200
+        static let totalCostLimit = 50 * 1_024 * 1_024
+        static let bytesPerPixel: CGFloat = 4
+    }
+
+    private let ttl: TimeInterval = Constants.ttl
 
     private let cache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
-        cache.countLimit = 200
-        cache.totalCostLimit = 50 * 1_024 * 1_024
+        cache.countLimit = Constants.countLimit
+        cache.totalCostLimit = Constants.totalCostLimit
         return cache
     }()
 
@@ -41,7 +48,7 @@ final class ImageCache: @unchecked Sendable {
 
     func store(_ image: UIImage, for url: URL) {
         let key = url.absoluteString as NSString
-        let cost = Int(image.size.width * image.size.height * image.scale * 4)
+        let cost = Int(image.size.width * image.size.height * image.scale * Constants.bytesPerPixel)
         cache.setObject(image, forKey: key, cost: cost)
 
         lock.lock()

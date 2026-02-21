@@ -18,16 +18,16 @@ struct CharactersListItem: View {
                         .resizable()
                         .scaledToFill()
                 } placeholder: {
-                    Color.textPrimary.opacity(0.3)
+                    Color.textPrimary.opacity(Opacity.subtle)
                 }
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 32))
+                .frame(width: Size.avatarMedium, height: Size.avatarMedium)
+                .clipShape(RoundedRectangle(cornerRadius: Radius.xxLarge))
             }
 
             Spacer()
-                .frame(width: 16)
+                .frame(width: Spacing.large)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                 Text(character.name)
                     .bodySemibold()
 

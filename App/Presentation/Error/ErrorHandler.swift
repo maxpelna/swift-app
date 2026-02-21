@@ -27,7 +27,7 @@ final class ErrorHandler: ErrorReportingServiceInjectable {
 
         dismissTask?.cancel()
         dismissTask = Task {
-            try? await Task.sleep(for: .seconds(3))
+            try? await Task.sleep(for: .seconds(Duration.toast))
             errorMessage = nil
         }
     }

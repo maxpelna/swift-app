@@ -13,7 +13,7 @@ struct NoConnectionView: View {
             Color.backgroundSecondary
                 .ignoresSafeArea()
 
-            VStack(spacing: 20) {
+            VStack(spacing: Spacing.xLarge) {
                 Text(.noNetworkConnectionTitle)
                     .headerPrimary()
                     .bold()
@@ -23,7 +23,7 @@ struct NoConnectionView: View {
                     .aspectRatio(contentMode: .fit)
                     .foregroundStyle(.tint)
                     .symbolEffect(.breathe, options: .repeat(.continuous))
-                    .padding(100)
+                    .padding(Spacing.huge)
             }
             .frame(maxHeight: .infinity, alignment: .center)
         }

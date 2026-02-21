@@ -15,7 +15,7 @@ final class InputDebouncerObserver: ObservableObject {
 
     init() {
         $input
-            .debounce(for: .seconds(0.25), scheduler: RunLoop.main)
+            .debounce(for: .seconds(Duration.debounce), scheduler: RunLoop.main)
             .assign(to: &$output)
     }
 }

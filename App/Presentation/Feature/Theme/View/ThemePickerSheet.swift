@@ -26,7 +26,7 @@ struct ThemePickerSheet: View {
                         theme.image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .clipShape(.rect(cornerRadius: 10))
+                            .clipShape(.rect(cornerRadius: Radius.small))
 
                         Text(theme.localizedTitle)
                             .captionSecondary()

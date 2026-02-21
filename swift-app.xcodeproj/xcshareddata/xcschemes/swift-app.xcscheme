@@ -41,7 +41,6 @@
                ReferencedContainer = "container:swift-app.xcodeproj">
             </BuildableReference>
          </TestableReference>
-
       </Testables>
    </TestAction>
    <LaunchAction

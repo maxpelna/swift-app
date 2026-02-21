@@ -19,10 +19,10 @@ struct LoadingOverlay<Content: View>: View {
                     ZStack {
                         Color.backgroundSecondary
                             .background(.ultraThinMaterial)
-                            .opacity(0.5)
+                            .opacity(Opacity.dim)
                             .edgesIgnoringSafeArea(.all)
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(20)
+                            .frame(width: Size.containerSmall, height: Size.containerSmall)
+                            .cornerRadius(Radius.large)
 
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
@@ -31,7 +31,7 @@ struct LoadingOverlay<Content: View>: View {
                     .transition(
                         .scale
                             .combined(with: .opacity)
-                            .animation(.snappy(duration: 0.3))
+                            .animation(.snappy(duration: Duration.transition))
                     )
                 }
             }
