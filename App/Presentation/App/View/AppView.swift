@@ -19,14 +19,8 @@ struct AppView: View {
     var body: some View {
         NavigationStack(path: $coordinator.path) {
             ErrorOverlay {
-                ZStack {
-                    coordinator.build(page: viewModel.appState.toRoute())
-                        .animation(.smooth, value: viewModel.appState)
-
-                    if !viewModel.isConnected {
-                        NoConnectionView()
-                    }
-                }
+                coordinator.build(page: viewModel.appState.toRoute())
+                    .animation(.smooth, value: viewModel.appState)
             }
             .navigationDestination(for: PageRoute.self) { route in
                 coordinator.build(page: route)
@@ -48,6 +42,10 @@ struct AppView: View {
             coordinator.handleDeepLink(deepLink)
         }
         .overlay {
+            if !viewModel.isConnected {
+                NoConnectionView()
+            }
+
             if scenePhase != .active {
                 SplashView()
                     .ignoresSafeArea()
