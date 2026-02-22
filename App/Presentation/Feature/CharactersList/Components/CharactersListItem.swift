@@ -5,6 +5,7 @@
 //  Created by Maksims Pelna on 26/12/2025.
 //
 
+import NukeUI
 import SwiftUI
 
 struct CharactersListItem: View {
@@ -13,12 +14,14 @@ struct CharactersListItem: View {
     var body: some View {
         HStack(spacing: 0) {
             if !character.image.isEmpty {
-                CachedAsyncImage(url: character.image) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Color.textPrimary.opacity(Opacity.subtle)
+                LazyImage(url: URL(string: character.image)) { state in
+                    if let image = state.image {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        Color.textPrimary.opacity(Opacity.subtle)
+                    }
                 }
                 .frame(width: Size.avatarMedium, height: Size.avatarMedium)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.xxLarge))
