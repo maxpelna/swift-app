@@ -15,5 +15,10 @@ enum EnvConfig {
         return value
     }()
 
-    static let bundleId = Bundle.main.bundleIdentifier ?? "com.mpelna.swift-app"
+    static let bundleId: String = {
+        guard let value = Bundle.main.bundleIdentifier else {
+            fatalError("Cannot get Bundle.main.bundleIdentifier")
+        }
+        return value
+    }()
 }

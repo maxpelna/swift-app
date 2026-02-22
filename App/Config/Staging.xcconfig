@@ -1,5 +1,5 @@
-// Debug configuration
-// To use: In Xcode → Project → Info → Configurations → Debug, set this file for the swift-app target.
+// Staging configuration
+// To use: In Xcode → Project → Info → Configurations → Staging, set this file for the swift-app target.
 
 // Note: "//" is the xcconfig comment character, so URLs need the $() trick to escape "//".
 BASE_URL=https:$()/$()/rickandmortyapi.com/api
