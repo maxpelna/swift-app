@@ -36,6 +36,14 @@ final class Coordinator {
         self.sheet = nil
     }
 
+    func handleDeepLink(_ deepLink: DeepLink) {
+        popToRoot()
+        switch deepLink {
+        case .secret:
+            pushPage(.secret)
+        }
+    }
+
     @ViewBuilder
     func build(page: PageRoute) -> some View {
         switch page {
@@ -53,6 +61,9 @@ final class Coordinator {
 
         case .settings:
             SettingsView()
+
+        case .secret:
+            SecretView()
         }
     }
 

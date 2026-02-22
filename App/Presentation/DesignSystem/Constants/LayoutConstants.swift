@@ -23,6 +23,7 @@ enum Sizes {
     static let iconLarge: CGFloat = 40
     static let avatarMedium: CGFloat = 64
     static let containerSmall: CGFloat = 80
+    static let iconHero: CGFloat = 120
     static let sheetCompact: CGFloat = 320
 }
 

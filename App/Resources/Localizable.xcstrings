@@ -511,6 +511,23 @@
         }
       }
     },
+    "secretTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secreto"
+          }
+        }
+      }
+    },
     "settingsAppearance" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -43,6 +43,10 @@ struct AppView: View {
         .onChange(of: viewModel.appTheme) { _, newValue in
             triggerThemeChange(newValue)
         }
+        .onOpenURL { url in
+            guard let deepLink = DeepLink(url: url) else { return }
+            coordinator.handleDeepLink(deepLink)
+        }
         .overlay {
             if scenePhase != .active {
                 SplashView()

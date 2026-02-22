@@ -17,4 +17,5 @@ enum Icons {
     static let circleCheckmarkFilled = "checkmark.circle.fill"
     static let circleCheckmarkEmpty = "circle"
     static let warning = "exclamationmark.circle.fill"
+    static let secret = "wand.and.sparkles"
 }
