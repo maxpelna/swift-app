@@ -18,6 +18,7 @@ struct SplashView: View {
             VStack {
                 Image(systemName: Icons.splash)
                     .resizable()
+                    .accessibilityHidden(true)
                     .aspectRatio(contentMode: .fit)
                     .foregroundStyle(.tint)
                     .symbolEffect(

@@ -18,7 +18,7 @@ enum Spacing {
     static let massive: CGFloat = 120
 }
 
-enum Size {
+enum Sizes {
     static let iconSmall: CGFloat = 16
     static let iconLarge: CGFloat = 40
     static let avatarMedium: CGFloat = 64

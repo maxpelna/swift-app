@@ -38,6 +38,7 @@ struct CharactersListView: View {
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
+                            .id(viewModel.page)
                     }
                 }
             }
@@ -49,11 +50,13 @@ struct CharactersListView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onFilterIconTap) {
                     Image(systemName: Icons.filter)
+                        .accessibilityLabel(Text(.filterTitle))
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onSettingsIconTap) {
                     Image(systemName: Icons.settings)
+                        .accessibilityLabel(Text(.settingsTitle))
                 }
             }
         }

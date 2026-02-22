@@ -22,7 +22,8 @@ struct ErrorOverlay<Content: View>: View {
 
                         HStack {
                             Image(systemName: Icons.warning)
-                                .font(.system(size: Size.iconSmall))
+                                .font(.system(size: Sizes.iconSmall))
+                                .accessibilityHidden(true)
 
                             Spacer().frame(width: Spacing.small)
 

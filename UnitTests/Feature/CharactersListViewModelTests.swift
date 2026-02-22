@@ -375,7 +375,7 @@ extension ViewModelTestsSuite {
         // MARK: - hasAppliedFilters
 
         @Test
-        func hasAppliedFilters_falseWhenNoneSet() async {
+        func hasAppliedFilters_falseWhenNoneSet() {
             let mock = MockPCharactersService()
             let vm = makeViewModel(service: mock)
 

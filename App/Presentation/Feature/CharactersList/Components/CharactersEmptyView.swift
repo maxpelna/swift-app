@@ -16,7 +16,8 @@ struct CharactersEmptyView: View {
 
             VStack(spacing: Spacing.xxLarge) {
                 Image(systemName: Icons.search)
-                    .font(.system(size: Size.iconLarge))
+                    .accessibilityHidden(true)
+                    .font(.system(size: Sizes.iconLarge))
                     .symbolEffect(.breathe, options: .repeat(.continuous))
 
                 Text(.noCharactersFound)

@@ -34,6 +34,7 @@ struct ThemePickerSheet: View {
                         Image(systemName: isSelected ? Icons.circleCheckmarkFilled : Icons.circleCheckmarkEmpty)
                             .foregroundStyle(.tint)
                             .transition(.blurReplace)
+                            .accessibilityLabel(isSelected ? Text(.generalSelected) : Text(.generalNotSelected))
                     }
                     .frame(maxWidth: .infinity)
                     .onTapGesture {

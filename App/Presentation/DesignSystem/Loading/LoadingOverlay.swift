@@ -21,7 +21,10 @@ struct LoadingOverlay<Content: View>: View {
                             .background(.ultraThinMaterial)
                             .opacity(Opacity.dim)
                             .edgesIgnoringSafeArea(.all)
-                            .frame(width: Size.containerSmall, height: Size.containerSmall)
+                            .frame(
+                                width: Sizes.containerSmall,
+                                height: Sizes.containerSmall
+                            )
                             .cornerRadius(Radius.large)
 
                         ProgressView()
@@ -29,9 +32,7 @@ struct LoadingOverlay<Content: View>: View {
                             .tint(.accentColor)
                     }
                     .transition(
-                        .scale
-                            .combined(with: .opacity)
-                            .animation(.snappy(duration: Duration.transition))
+                        .scale.animation(.snappy(duration: Duration.transition))
                     )
                 }
             }

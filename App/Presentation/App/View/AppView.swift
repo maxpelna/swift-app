@@ -12,7 +12,7 @@ struct AppView: View {
     @State private var errorHandler = ErrorHandler()
     @State private var analyticsLogger = AnalyticsLogger()
     @State private var viewModel = AppViewModel()
-    
+
     @Environment(\.scenePhase)
     private var scenePhase
 

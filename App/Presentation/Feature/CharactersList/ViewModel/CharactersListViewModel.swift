@@ -22,13 +22,13 @@ final class CharactersListViewModel: CharactersServiceInjectable {
 
     // MARK: - Private variables
 
-    private var page: Int = 1
     private var canLoadMore: Bool = false
 
     // MARK: - State
 
     private(set) var charactersResult: DelayedResult<[CharacterEntity]> = DelayedResult.none()
     private(set) var loadMoreResult: DelayedResult<Void> = DelayedResult.none()
+    private(set) var page: Int = 1
     private(set) var searchQuery: String = ""
     private(set) var selectedGender: CharacterGender?
     private(set) var selectedStatus: CharacterStatus?

@@ -290,23 +290,6 @@
         }
       }
     },
-    "errorNetworkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin conexión a internet"
-          }
-        }
-      }
-    },
     "errorInvalidUrl" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -320,6 +303,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "URL no válida"
+          }
+        }
+      }
+    },
+    "errorNetworkUnavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexión a internet"
           }
         }
       }
@@ -422,6 +422,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finalizar"
+          }
+        }
+      }
+    },
+    "generalNotSelected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No seleccionado"
+          }
+        }
+      }
+    },
+    "generalSelected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionado"
           }
         }
       }

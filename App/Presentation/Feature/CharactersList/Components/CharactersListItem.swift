@@ -23,7 +23,7 @@ struct CharactersListItem: View {
                         Color.textPrimary.opacity(Opacity.subtle)
                     }
                 }
-                .frame(width: Size.avatarMedium, height: Size.avatarMedium)
+                .frame(width: Sizes.avatarMedium, height: Sizes.avatarMedium)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.xxLarge))
             }
 

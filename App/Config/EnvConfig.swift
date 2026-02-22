@@ -14,6 +14,6 @@ enum EnvConfig {
         }
         return value
     }()
-    
-    static let bundleId = Bundle.main.bundleIdentifier ?? "swift-app"
+
+    static let bundleId = Bundle.main.bundleIdentifier ?? "com.mpelna.swift-app"
 }

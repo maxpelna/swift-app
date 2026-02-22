@@ -15,45 +15,8 @@ struct CharactersFilterSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    ForEach(CharacterGender.allCases, id: \.rawValue) { gender in
-                        Button {
-                            selectGender(gender)
-                        } label: {
-                            HStack {
-                                Text(gender.localized())
-                                    .bodyRegular()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                if viewModel.selectedGender == gender {
-                                    Image(systemName: Icons.checkmark)
-                                }
-                            }
-                        }
-                    }
-                } header: {
-                    Text(.characterGender)
-                }
-
-                Section {
-                    ForEach(CharacterStatus.allCases, id: \.rawValue) { status in
-                        Button {
-                            selectStatus(status)
-                        } label: {
-                            HStack {
-                                Text(status.localized())
-                                    .bodyRegular()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                if viewModel.selectedStatus == status {
-                                    Image(systemName: Icons.checkmark)
-                                }
-                            }
-                        }
-                    }
-                } header: {
-                    Text(.characterStatus)
-                }
+                genderSection
+                statusSection
             }
             .navigationTitle(.filterTitle)
             .toolbar {
@@ -71,6 +34,7 @@ struct CharactersFilterSheet: View {
                         )
                     } label: {
                         Image(systemName: Icons.checkmark)
+                            .accessibilityLabel(Text(.generalApply))
                     }
                     .buttonStyle(.glassProminent)
                 }
@@ -83,6 +47,52 @@ struct CharactersFilterSheet: View {
                     viewConfig.selectedStatus
                 )
             )
+        }
+    }
+
+    @ViewBuilder private var genderSection: some View {
+        Section {
+            ForEach(CharacterGender.allCases, id: \.rawValue) { gender in
+                Button {
+                    selectGender(gender)
+                } label: {
+                    HStack {
+                        Text(gender.localized())
+                            .bodyRegular()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        if viewModel.selectedGender == gender {
+                            Image(systemName: Icons.checkmark)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                }
+            }
+        } header: {
+            Text(.characterGender)
+        }
+    }
+
+    @ViewBuilder private var statusSection: some View {
+        Section {
+            ForEach(CharacterStatus.allCases, id: \.rawValue) { status in
+                Button {
+                    selectStatus(status)
+                } label: {
+                    HStack {
+                        Text(status.localized())
+                            .bodyRegular()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        if viewModel.selectedStatus == status {
+                            Image(systemName: Icons.checkmark)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                }
+            }
+        } header: {
+            Text(.characterStatus)
         }
     }
 

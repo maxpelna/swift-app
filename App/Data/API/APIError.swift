@@ -26,11 +26,11 @@ extension APIError {
         switch self {
         case .server(let statusCode, _):
             return [429, 500, 502, 503, 504].contains(statusCode)
-        
+
         case .unknown(let error):
             guard let urlError = error as? URLError else { return false }
             return [.timedOut, .networkConnectionLost, .cannotConnectToHost].contains(urlError.code)
-        
+
         case .invalidUrl, .decoding:
             return false
         }

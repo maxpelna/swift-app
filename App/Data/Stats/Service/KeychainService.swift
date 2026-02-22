@@ -12,15 +12,14 @@ import Security
 // Unlike UserDefaults, Keychain data persists across app uninstalls on iOS,
 // so we can detect a genuine reinstall and clear stale UserDefaults data.
 final class KeychainService: PKeychainService {
-    private let account = "com.mpelna.swift-app.installSentinel"
-    private let service = "com.mpelna.swift-app"
+    private let account = EnvConfig.bundleId + ".installSentinel"
+    private let service = EnvConfig.bundleId
 
     func isFirstInstall() -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
         let status = SecItemCopyMatching(query as CFDictionary, nil)

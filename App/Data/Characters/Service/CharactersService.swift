@@ -8,9 +8,9 @@
 import Foundation
 
 final class CharactersService: PCharactersService {
-    let apiClient: PAPIClient
+    let apiClient: APIClient
 
-    init(apiClient: PAPIClient) {
+    init(apiClient: APIClient) {
         self.apiClient = apiClient
     }
 

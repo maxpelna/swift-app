@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		186919942F4ADE8E00AAF064 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 186919932F4ADE8E00AAF064 /* NukeUI */; };
-		186919972F4AE34D00AAF064 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 186919962F4AE34D00AAF064 /* SnapshotTesting */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +67,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				186919972F4AE34D00AAF064 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +169,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				186919922F4ADE8E00AAF064 /* XCRemoteSwiftPackageReference "Nuke" */,
-				186919952F4AE34D00AAF064 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18B9A3182EDCC81300F2C64F /* Products */;
@@ -586,14 +583,6 @@
 				minimumVersion = 12.8.0;
 			};
 		};
-		186919952F4AE34D00AAF064 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.18.9;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -601,11 +590,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 186919922F4ADE8E00AAF064 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
-		};
-		186919962F4AE34D00AAF064 /* SnapshotTesting */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 186919952F4AE34D00AAF064 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
-			productName = SnapshotTesting;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

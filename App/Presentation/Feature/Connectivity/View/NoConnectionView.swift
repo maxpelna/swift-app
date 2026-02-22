@@ -20,6 +20,7 @@ struct NoConnectionView: View {
 
                 Image(systemName: Icons.noNetworkConnection)
                     .resizable()
+                    .accessibilityHidden(true)
                     .aspectRatio(contentMode: .fit)
                     .foregroundStyle(.tint)
                     .symbolEffect(.breathe, options: .repeat(.continuous))

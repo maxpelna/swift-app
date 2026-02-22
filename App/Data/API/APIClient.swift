@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class APIClient: PAPIClient {
+final class APIClient {
     // MARK: - Retry policy
 
     private enum RetryPolicy {
@@ -57,7 +57,7 @@ final class APIClient: PAPIClient {
 
         return try await requestWithRetry(urlRequest)
     }
-    
+
     // MARK: - Private methods
 
     private func requestWithRetry<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
