@@ -17,8 +17,8 @@ open swift-app.xcodeproj
 
 **Available flavors (schemes):**
 
-- `swift-app-release` - Production build
-- `swift-app-staging` - Staging / QA build
+- `prod` - Production build
+- `staging` - Staging / QA build
 
 Select the desired scheme via **Product → Scheme → Edit Scheme** and switch the build configuration accordingly.
 
