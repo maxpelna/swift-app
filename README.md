@@ -98,7 +98,7 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 
 ## Testing
 
-Unit tests are written using Apple's [Swift Testing](https://developer.apple.com/xcode/swift-testing/) framework. The following ViewModels are covered:
+Unit tests are written using Apple's framework. The following ViewModels are covered:
 
 - `AppViewModel`
 - `CharactersListViewModel`
