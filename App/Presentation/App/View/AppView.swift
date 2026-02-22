@@ -11,28 +11,40 @@ struct AppView: View {
     @State private var coordinator = Coordinator()
     @State private var errorHandler = ErrorHandler()
     @State private var analyticsLogger = AnalyticsLogger()
-    @State private var viewModel = AppViewModel()
+    @State private var viewModel = AppViewModel(splashDurationInMilliseconds: 1_000)
 
     @Environment(\.scenePhase)
     private var scenePhase
 
     var body: some View {
-        NavigationStack(path: $coordinator.path) {
-            ErrorOverlay {
-                coordinator.build(page: viewModel.appState.toRoute())
-                    .animation(.smooth, value: viewModel.appState)
-            }
-            .navigationDestination(for: PageRoute.self) { route in
-                coordinator.build(page: route)
-            }
-            .sheet(item: $coordinator.sheet) { route in
-                coordinator.build(sheet: route)
+        Group {
+            switch viewModel.appState {
+            case .loading:
+                SplashView()
+                    .slideFromBottom()
+
+            case .clean:
+                OnboardingView()
+                    .slideFromBottom()
+
+            case .authorized:
+                NavigationStack(path: $coordinator.path) {
+                    ErrorOverlay {
+                        CharactersListView()
+                    }
+                    .navigationDestination(for: PageRoute.self) { route in
+                        coordinator.build(page: route)
+                    }
+                    .sheet(item: $coordinator.sheet) { route in
+                        coordinator.build(sheet: route)
+                    }
+                }
+                .slideFromBottom()
             }
         }
+        .animation(.smooth, value: viewModel.appState)
         .task {
             viewModel.addEvent(.startApp)
-            viewModel.addEvent(.listenStats)
-            viewModel.addEvent(.listenConnectivity)
         }
         .onChange(of: viewModel.appTheme) { _, newValue in
             triggerThemeChange(newValue)

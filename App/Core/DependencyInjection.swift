@@ -85,7 +85,7 @@ final class DIContainer {
     }()
 
     lazy var userStatsService: PUserStatsService = {
-        UserStatsService()
+        UserStatsService(defaults: UserDefaults.standard)
     }()
 
     lazy var analyticsService: PAnalyticsService = {

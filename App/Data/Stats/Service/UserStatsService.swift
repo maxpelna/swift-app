@@ -14,7 +14,7 @@ final class UserStatsService: PUserStatsService {
     private let _reloadAppStatusTrigger = PassthroughSubject<Void, Never>()
     private let defaults: UserDefaults
 
-    init(defaults: UserDefaults = UserDefaults(suiteName: EnvConfig.bundleId) ?? .standard) {
+    init(defaults: UserDefaults) {
         self.defaults = defaults
     }
 

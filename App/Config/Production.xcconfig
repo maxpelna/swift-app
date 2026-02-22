@@ -1,5 +1,3 @@
-// Production configuration
-// To use: In Xcode → Project → Info → Configurations → Production Debug/Release, set this file for the swift-app target.
-
 // Note: "//" is the xcconfig comment character, so URLs need the $() trick to escape "//".
 BASE_URL=https:$()/$()/rickandmortyapi.com/api
+PREFIX=PROD

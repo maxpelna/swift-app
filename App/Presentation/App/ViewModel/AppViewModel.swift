@@ -15,8 +15,6 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
 
     enum Event {
         case startApp
-        case listenStats
-        case listenConnectivity
     }
 
     // MARK: - Private
@@ -33,15 +31,25 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
 
     @ObservationIgnored var currentTask: Task<Void, Never>?
 
+    // MARK: - Init
+
+    private let splashDurationInMilliseconds: Int
+
+    init(splashDurationInMilliseconds: Int) {
+        self.splashDurationInMilliseconds = splashDurationInMilliseconds
+    }
+
     // MARK: - Handlers
 
     func addEvent(_ event: Event) {
         currentTask?.cancel()
         currentTask = Task {
             switch event {
-            case .startApp: await startApp()
-            case .listenStats: listenStats()
-            case .listenConnectivity: listenConnectivity()
+            case .startApp:
+                bag = .init()
+                await startApp()
+                listenStats()
+                listenConnectivity()
             }
         }
     }
@@ -51,7 +59,7 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
 
         // Just a dummy timer to show splash view. In real app there can be multiple checks
         // e.g. if token exists, if launched with deep link, if should show pin code.
-        try? await Task.sleep(for: .seconds(1))
+        try? await Task.sleep(for: .milliseconds(splashDurationInMilliseconds))
 
         setOriginalStates()
     }

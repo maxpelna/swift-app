@@ -19,7 +19,7 @@ extension ViewModelTestsSuite {
             DIContainer.shared.userStatsService = stats
             DIContainer.shared.connectivityService = connectivity
             DIContainer.shared.keychainService = keychain
-            return AppViewModel()
+            return AppViewModel(splashDurationInMilliseconds: 1)
         }
 
         @Test
@@ -35,7 +35,7 @@ extension ViewModelTestsSuite {
             stats.isOnboardingFinished = false
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.listenStats)
+            vm.addEvent(.startApp)
             await vm.currentTask?.value
 
             stats.fireReload()
@@ -49,7 +49,7 @@ extension ViewModelTestsSuite {
             stats.isOnboardingFinished = true
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.listenStats)
+            vm.addEvent(.startApp)
             await vm.currentTask?.value
 
             stats.fireReload()
@@ -63,7 +63,7 @@ extension ViewModelTestsSuite {
             stats.theme = .dark
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.listenStats)
+            vm.addEvent(.startApp)
             await vm.currentTask?.value
 
             stats.fireReload()
@@ -79,7 +79,7 @@ extension ViewModelTestsSuite {
             let connectivity = MockPConnectivityService(initialValue: true)
             let vm = makeViewModel(stats: stats, connectivity: connectivity)
 
-            vm.addEvent(.listenConnectivity)
+            vm.addEvent(.startApp)
             await vm.currentTask?.value
 
             connectivity.send(false)
@@ -97,7 +97,7 @@ extension ViewModelTestsSuite {
             let connectivity = MockPConnectivityService(initialValue: true)
             let vm = makeViewModel(stats: stats, connectivity: connectivity)
 
-            vm.addEvent(.listenConnectivity)
+            vm.addEvent(.startApp)
             await vm.currentTask?.value
 
             connectivity.send(false)

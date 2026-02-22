@@ -49,15 +49,12 @@ final class Coordinator {
         switch page {
         case .splash:
             SplashView()
-                .transition(.move(edge: .bottom).combined(with: .opacity))
 
         case .onboarding:
             OnboardingView()
-                .transition(.move(edge: .bottom).combined(with: .opacity))
 
         case .charactersList:
             CharactersListView()
-                .transition(.move(edge: .bottom).combined(with: .opacity))
 
         case .settings:
             SettingsView()

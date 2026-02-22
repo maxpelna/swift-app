@@ -20,7 +20,8 @@ open swift-app.xcodeproj
 - `prod` - Production build
 - `staging` - Staging / QA build
 
-Select the desired scheme via **Product → Scheme → Edit Scheme** and switch the build configuration accordingly.
+These flavors just for showcase purpose. Both have the same BASE_URL inside .xcconfig files.
+API Logging is enabled based on Debug build, not flavors.
 
 **SwiftLint**
 
