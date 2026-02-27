@@ -9,5 +9,10 @@ import Foundation
 
 struct AnalyticsEvent {
     let name: AnalyticsEventName
-    let parameters: [String: String]? = nil
+    let parameters: [String: String]?
+
+    init(name: AnalyticsEventName, parameters: [String: String]? = nil) {
+        self.name = name
+        self.parameters = parameters
+    }
 }

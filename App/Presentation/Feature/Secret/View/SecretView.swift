@@ -10,9 +10,6 @@ import SwiftUI
 struct SecretView: View {
     @State private var appeared = false
 
-    @Environment(\.coordinator)
-    private var coordinator
-
     var body: some View {
         ZStack {
             Color.backgroundPrimary

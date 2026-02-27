@@ -12,6 +12,5 @@ enum AppError: Error, Equatable {
     case networkUnavailable
     case serverError(statusCode: Int)
     case decodingFailed
-    case notFound
     case unknown
 }

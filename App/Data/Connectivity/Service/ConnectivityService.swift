@@ -23,4 +23,8 @@ final class ConnectivityService: PConnectivityService {
         }
         networkMonitor.start(queue: workerQueue)
     }
+
+    deinit {
+        networkMonitor.cancel()
+    }
 }

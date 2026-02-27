@@ -34,9 +34,6 @@ final class ErrorHandler: ErrorReportingServiceInjectable {
 
     private func localizeError(_ error: Error) -> String? {
         switch error {
-        case AppError.emptyState, AppError.notFound:
-            return nil
-
         case AppError.networkUnavailable:
             return String(localized: .errorNetworkUnavailable)
 

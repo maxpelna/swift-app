@@ -13,8 +13,8 @@ struct CharactersListItem: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            if !character.image.isEmpty {
-                LazyImage(url: URL(string: character.image)) { state in
+            if let url = URL(string: character.image) {
+                LazyImage(url: url) { state in
                     if let image = state.image {
                         image
                             .resizable()

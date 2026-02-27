@@ -46,9 +46,6 @@ struct SettingsView: View {
         .task {
             viewModel.addEvent(.initialLoad)
         }
-        .onChange(of: viewModel.selectedTheme) { _, newValue in
-            triggerThemeChange(newValue)
-        }
         .alert(isPresented: $showResetAlert) {
             Alert(
                 title: Text(.settingsResetAlertTitle),
@@ -67,12 +64,17 @@ struct SettingsView: View {
     }
 
     private func onThemeTap() {
-        logger.log(AnalyticsEvent(name: .onThemeSwitchTap))
         coordinator.presentSheet(
             .appThemePicker(
                 ThemePickerViewConfig(
                     selectedTheme: viewModel.selectedTheme
                 ) { theme in
+                    logger.log(
+                        AnalyticsEvent(
+                            name: AnalyticsEventName.onThemeSwitchTap,
+                            parameters: [AnalyticsParameterEventName.theme.rawValue: theme.rawValue]
+                        )
+                    )
                     coordinator.dismissSheet()
                     triggerThemeChange(theme)
                     viewModel.addEvent(.changeTheme(theme))
@@ -83,7 +85,7 @@ struct SettingsView: View {
 
     private func onResetAllTap() {
         logger.log(AnalyticsEvent(name: .onEraseTap))
-        showResetAlert.toggle()
+        showResetAlert = true
     }
 
     private func onConfirmTap() {
