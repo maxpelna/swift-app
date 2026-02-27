@@ -147,7 +147,4 @@ final class CharactersListViewModel: CharactersServiceInjectable {
         }
     }
 
-    // MARK: - Deinit
-
-    deinit { currentTask?.cancel() }
 }

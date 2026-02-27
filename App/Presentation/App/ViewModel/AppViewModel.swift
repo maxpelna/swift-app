@@ -95,7 +95,4 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
         }
     }
 
-    // MARK: - Deinit
-
-    deinit { currentTask?.cancel() }
 }
