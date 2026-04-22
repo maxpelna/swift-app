@@ -10,10 +10,17 @@ import Nuke
 
 @main
 struct Main: App {
+    @State private var coordinator = Coordinator()
+    @State private var errorHandler = ErrorHandler()
+    @State private var analyticsLogger = AnalyticsLogger()
+
     var body: some Scene {
         WindowGroup {
             AppView()
         }
+        .environment(coordinator)
+        .environment(errorHandler)
+        .environment(analyticsLogger)
     }
 
     init() {

@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct AppView: View {
-    @State private var coordinator = Coordinator()
-    @State private var errorHandler = ErrorHandler()
-    @State private var analyticsLogger = AnalyticsLogger()
     @State private var viewModel = AppViewModel(splashDurationInMilliseconds: 1_000)
 
     @Environment(\.scenePhase)
     private var scenePhase
 
+    @Environment(Coordinator.self)
+    private var coordinator
+
     var body: some View {
+        @Bindable var coordinator = coordinator
+
         Group {
             switch viewModel.appState {
             case .loading:
@@ -63,8 +65,5 @@ struct AppView: View {
                     .ignoresSafeArea()
             }
         }
-        .environment(\.coordinator, coordinator)
-        .environment(\.errorHandler, errorHandler)
-        .environment(\.analyticsLogger, analyticsLogger)
     }
 }

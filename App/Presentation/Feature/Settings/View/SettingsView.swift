@@ -11,10 +11,10 @@ struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     @State private var showResetAlert: Bool = false
 
-    @Environment(\.coordinator)
+    @Environment(Coordinator.self)
     private var coordinator
 
-    @Environment(\.analyticsLogger)
+    @Environment(AnalyticsLogger.self)
     private var logger
 
     var body: some View {

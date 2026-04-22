@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingView: View {
     @State private var viewModel = OnboardingViewModel()
 
-    @Environment(\.analyticsLogger)
+    @Environment(AnalyticsLogger.self)
     private var logger
 
     var body: some View {

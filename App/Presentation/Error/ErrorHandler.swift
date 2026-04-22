@@ -8,7 +8,6 @@
 import Foundation
 import Observation
 
-@MainActor
 @Observable
 final class ErrorHandler: ErrorReportingServiceInjectable {
     private(set) var errorMessage: String?

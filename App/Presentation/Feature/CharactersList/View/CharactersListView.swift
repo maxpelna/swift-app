@@ -12,10 +12,10 @@ struct CharactersListView: View {
 
     @StateObject private var debounceObserver = InputDebouncerObserver()
 
-    @Environment(\.coordinator)
+    @Environment(Coordinator.self)
     private var coordinator
 
-    @Environment(\.errorHandler)
+    @Environment(ErrorHandler.self)
     private var errorHandler
 
     var body: some View {

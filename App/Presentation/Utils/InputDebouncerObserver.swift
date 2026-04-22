@@ -8,7 +8,6 @@
 import Combine
 import SwiftUI
 
-@MainActor
 final class InputDebouncerObserver: ObservableObject {
     @Published var input = ""
     @Published private(set) var output = ""

@@ -71,7 +71,6 @@ extension ErrorReportingServiceInjectable {
 
 // MARK: - DIContainer
 
-@MainActor
 final class DIContainer {
     static let shared = DIContainer()
 

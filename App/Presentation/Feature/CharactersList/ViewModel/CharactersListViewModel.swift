@@ -7,7 +7,6 @@
 
 import Observation
 
-@MainActor
 @Observable
 final class CharactersListViewModel: CharactersServiceInjectable {
     // MARK: - Event
@@ -146,5 +145,4 @@ final class CharactersListViewModel: CharactersServiceInjectable {
             charactersResult = .fromError(error)
         }
     }
-
 }

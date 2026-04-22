@@ -8,7 +8,6 @@
 import Combine
 import Observation
 
-@MainActor
 @Observable
 final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable, KeychainServiceInjectable {
     // MARK: - Event
@@ -94,5 +93,4 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
             keychainService.markInstalled()
         }
     }
-
 }
