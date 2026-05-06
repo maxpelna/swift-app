@@ -13,6 +13,7 @@ struct CharactersResultResponse: Decodable {
     }
 
     private let info: CharacterInfoResponse
+
     let results: [CharacterResponse]
 
     nonisolated init(from decoder: any Decoder) throws {

@@ -19,9 +19,9 @@ struct APIErrorData: Decodable {
 }
 
 extension APIError {
-    /// Returns true for transient failures that are safe to retry.
-    /// 4xx client errors (except 429), decoding failures, and invalid URLs are not retried
-    /// because they would produce the same result on every attempt.
+    // Returns true for transient failures that are safe to retry.
+    // 4xx client errors (except 429), decoding failures, and invalid URLs are not retried
+    // because they would produce the same result on every attempt.
     var isRetryable: Bool {
         switch self {
         case .server(let statusCode, _):
