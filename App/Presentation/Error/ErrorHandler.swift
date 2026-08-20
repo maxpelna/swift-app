@@ -15,14 +15,11 @@ final class ErrorHandler: ErrorReportingServiceInjectable {
     @ObservationIgnored private var dismissTask: Task<Void, Never>?
 
     func showErrorMessage(_ error: Error?) {
-        guard let error else { return }
+        guard let error, !error.isCancellation else { return }
+        guard let message = localizeError(error) else { return }
 
-        let message = localizeError(error)
         errorMessage = message
-
-        if message != nil {
-            errorReportingService.recordNonFatalError(error)
-        }
+        errorReportingService.recordNonFatalError(error)
 
         dismissTask?.cancel()
         dismissTask = Task {
@@ -32,17 +29,14 @@ final class ErrorHandler: ErrorReportingServiceInjectable {
     }
 
     private func localizeError(_ error: Error) -> String? {
-        switch error {
-        case AppError.networkUnavailable:
+        switch error as? AppError {
+        case .emptyState:
+            return nil
+
+        case .noConnection:
             return String(localized: .errorNetworkUnavailable)
 
-        case AppError.decodingFailed:
-            return String(localized: .errorDecode)
-
-        case AppError.serverError(let statusCode):
-            return String(localized: .errorServerStatus(statusCode))
-
-        default:
+        case .caught, .none:
             return String(localized: .errorDefault)
         }
     }

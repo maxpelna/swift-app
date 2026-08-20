@@ -19,6 +19,8 @@ final class MockPCharactersService: PCharactersService {
     )
     var stubbedError: Error?
 
+    var onRequest: (() -> Void)?
+
     func charactersResult(
         page: Int,
         name: String?,
@@ -31,6 +33,7 @@ final class MockPCharactersService: PCharactersService {
         lastStatus = status
         lastGender = gender
 
+        onRequest?()
         await Task.yield()
 
         if let error = stubbedError { throw error }

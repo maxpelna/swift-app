@@ -9,38 +9,19 @@ import Observation
 
 @Observable
 final class SettingsViewModel: UserStatsServiceInjectable {
-    // MARK: - Event
-
-    enum Event {
-        case initialLoad
-        case changeTheme(AppTheme)
-        case resetStats
-    }
-
     // MARK: - State
 
-    private(set) var selectedTheme: AppTheme = .system
+    var selectedTheme: AppTheme {
+        userStatsService.appTheme
+    }
 
     // MARK: - Handlers
 
-    func addEvent(_ event: Event) {
-        switch event {
-        case .initialLoad: initialLoad()
-        case let .changeTheme(theme): changeTheme(theme)
-        case .resetStats: resetStats()
-        }
-    }
-
-    private func initialLoad() {
-        selectedTheme = userStatsService.getAppTheme()
-    }
-
-    private func changeTheme(_ theme: AppTheme) {
-        selectedTheme = theme
+    func changeTheme(_ theme: AppTheme) {
         userStatsService.setAppTheme(theme)
     }
 
-    private func resetStats() {
+    func resetStats() {
         userStatsService.resetAll()
     }
 }

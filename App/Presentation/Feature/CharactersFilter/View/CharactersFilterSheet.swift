@@ -22,7 +22,7 @@ struct CharactersFilterSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(.generalClear) {
-                        viewModel.addEvent(.clearFilters)
+                        viewModel.clearFilters()
                     }
                 }
                 ToolbarSpacer(placement: .topBarTrailing)
@@ -41,11 +41,9 @@ struct CharactersFilterSheet: View {
             }
         }
         .task {
-            viewModel.addEvent(
-                .initialLoad(
-                    viewConfig.selectedGender,
-                    viewConfig.selectedStatus
-                )
+            viewModel.initialLoad(
+                gender: viewConfig.selectedGender,
+                status: viewConfig.selectedStatus
             )
         }
     }
@@ -97,10 +95,10 @@ struct CharactersFilterSheet: View {
     }
 
     private func selectGender(_ gender: CharacterGender) {
-        viewModel.addEvent(.setGender(gender))
+        viewModel.setGender(gender)
     }
 
     private func selectStatus(_ status: CharacterStatus) {
-        viewModel.addEvent(.setStatus(status))
+        viewModel.setStatus(status)
     }
 }

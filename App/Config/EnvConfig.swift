@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum EnvConfig {
+nonisolated enum EnvConfig {
     static let baseUrl: String = {
         guard let value = Bundle.main.infoDictionary?["BASE_URL"] as? String else {
             fatalError("BASE_URL missing from Info.plist — check .xcconfig assignment")

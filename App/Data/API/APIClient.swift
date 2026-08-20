@@ -22,7 +22,7 @@ final class APIClient {
     // MARK: - Properties
 
     private let session: URLSession
-    private let decoder: JSONDecoder = {
+    nonisolated private let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         return decoder
@@ -81,11 +81,14 @@ final class APIClient {
         throw lastError
     }
 
+    @concurrent
     private func performRequest<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
         let (data, response): (Data, URLResponse)
         do {
             (data, response) = try await session.data(for: urlRequest)
             log(data, response)
+        } catch let error as URLError where error.code == .cancelled && Task.isCancelled {
+            throw CancellationError()
         } catch {
             throw APIError.unknown(error)
         }

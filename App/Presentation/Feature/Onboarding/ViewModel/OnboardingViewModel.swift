@@ -9,21 +9,9 @@ import Observation
 
 @Observable
 final class OnboardingViewModel: UserStatsServiceInjectable {
-    // MARK: - Event
-
-    enum Event {
-        case finishOnboarding
-    }
-
     // MARK: - Handlers
 
-    func addEvent(_ event: Event) {
-        switch event {
-        case .finishOnboarding: finishOnboarding()
-        }
-    }
-
-    private func finishOnboarding() {
+    func finishOnboarding() {
         userStatsService.setIsOnboardingFinished()
     }
 }

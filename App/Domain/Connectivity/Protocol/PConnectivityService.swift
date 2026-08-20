@@ -5,8 +5,8 @@
 //  Created by Maksims Pelna on 26/12/2025.
 //
 
-import Combine
+import Foundation
 
 protocol PConnectivityService {
-    var connectivityStatus: AnyPublisher<Bool, Never> { get }
+    var isConnected: Bool { get }
 }

@@ -9,7 +9,6 @@ import Testing
 @testable import swift_app
 
 extension ViewModelTestsSuite {
-    @MainActor
     struct AppViewModelTests {
         private func makeViewModel(
             stats: MockPUserStatsService,
@@ -22,88 +21,83 @@ extension ViewModelTestsSuite {
             return AppViewModel(splashDurationInMilliseconds: 1)
         }
 
+        // MARK: - appState
+
         @Test
-        func initialState_isLoading() {
-            let vm = makeViewModel(stats: MockPUserStatsService())
+        func appState_beforeSplashFinishes_isLoading() {
+            let stats = MockPUserStatsService()
+            stats.isOnboardingFinished = true
+            let vm = makeViewModel(stats: stats)
+
             #expect(vm.appState == .loading)
-            #expect(vm.isConnected == true)
         }
 
         @Test
-        func listenStats_onboardingNotFinished_setsCleanState() async {
+        func appState_afterSplash_onboardingNotFinished_isClean() async {
             let stats = MockPUserStatsService()
             stats.isOnboardingFinished = false
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
-
-            stats.fireReload()
+            await vm.startApp()
 
             #expect(vm.appState == .clean)
         }
 
         @Test
-        func listenStats_onboardingFinished_setsAuthorizedState() async {
+        func appState_afterSplash_onboardingFinished_isAuthorized() async {
             let stats = MockPUserStatsService()
             stats.isOnboardingFinished = true
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
-
-            stats.fireReload()
+            await vm.startApp()
 
             #expect(vm.appState == .authorized)
         }
 
         @Test
-        func listenStats_setsAppThemeFromService() async {
+        func appState_followsOnboardingFinishingLater() async {
             let stats = MockPUserStatsService()
-            stats.theme = .dark
+            stats.isOnboardingFinished = false
             let vm = makeViewModel(stats: stats)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
+            await vm.startApp()
+            #expect(vm.appState == .clean)
 
-            stats.fireReload()
+            stats.setIsOnboardingFinished()
+
+            #expect(vm.appState == .authorized)
+        }
+
+        // MARK: - appTheme
+
+        @Test
+        func appTheme_followsService() {
+            let stats = MockPUserStatsService()
+            stats.appTheme = .dark
+            let vm = makeViewModel(stats: stats)
 
             #expect(vm.appTheme == .dark)
+
+            stats.setAppTheme(.light)
+
+            #expect(vm.appTheme == .light)
         }
+
+        // MARK: - isConnected
 
         @Test
-        func listenConnectivity_reconnectTriggers() async {
-            let stats = MockPUserStatsService()
-            stats.isOnboardingFinished = true
+        func isConnected_followsService() {
+            let connectivity = MockPConnectivityService(isConnected: true)
+            let vm = makeViewModel(stats: MockPUserStatsService(), connectivity: connectivity)
 
-            let connectivity = MockPConnectivityService(initialValue: true)
-            let vm = makeViewModel(stats: stats, connectivity: connectivity)
+            #expect(vm.isConnected)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
+            connectivity.isConnected = false
 
-            connectivity.send(false)
-            #expect(vm.isConnected == false)
-
-            connectivity.send(true)
-
-            #expect(vm.appState == .authorized)
-            #expect(vm.isConnected == true)
+            #expect(!vm.isConnected)
         }
 
-        @Test
-        func listenConnectivity_disconnect_updatesIsConnected() async {
-            let stats = MockPUserStatsService()
-            let connectivity = MockPConnectivityService(initialValue: true)
-            let vm = makeViewModel(stats: stats, connectivity: connectivity)
-
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
-
-            connectivity.send(false)
-
-            #expect(vm.isConnected == false)
-        }
+        // MARK: - startApp
 
         @Test
         func startApp_firstInstall_resetsStorageAndMarksInstalled() async {
@@ -112,8 +106,7 @@ extension ViewModelTestsSuite {
             keychain.firstInstallReturn = true
             let vm = makeViewModel(stats: stats, keychain: keychain)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
+            await vm.startApp()
 
             #expect(stats.resetAllCallCount == 1)
             #expect(keychain.markInstalledCallCount == 1)
@@ -126,23 +119,10 @@ extension ViewModelTestsSuite {
             keychain.firstInstallReturn = false
             let vm = makeViewModel(stats: stats, keychain: keychain)
 
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
+            await vm.startApp()
 
             #expect(stats.resetAllCallCount == 0)
             #expect(keychain.markInstalledCallCount == 0)
-        }
-
-        @Test
-        func startApp_setsAppStateAfterSplash() async {
-            let stats = MockPUserStatsService()
-            stats.isOnboardingFinished = true
-            let vm = makeViewModel(stats: stats)
-
-            vm.addEvent(.startApp)
-            await vm.currentTask?.value
-
-            #expect(vm.appState == .authorized)
         }
     }
 }

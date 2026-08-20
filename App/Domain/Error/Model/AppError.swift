@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum AppError: Error, Equatable {
+enum AppError: Error {
     case emptyState
-    case networkUnavailable
-    case serverError(statusCode: Int)
-    case decodingFailed
-    case unknown
+    case noConnection
+    /// Anything the presentation layer treats the same way. Carries the original so
+    /// diagnostics keep the whole chain instead of a renamed category.
+    case caught(Error)
 }

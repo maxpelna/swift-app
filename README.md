@@ -21,7 +21,8 @@ open swift-app.xcodeproj
 - `staging` - Staging / QA build
 
 These flavors just for showcase purpose. Both have the same BASE_URL inside .xcconfig files.
-API Logging is enabled based on Debug build, not flavors.
+API and analytics logging is compiled in via `#if DEBUG || STAGING`, so QA builds keep their logs
+while production ships without them.
 
 **SwiftLint**
 
@@ -47,19 +48,21 @@ There are three layers: Data, Domain, and Presentation (feature-based or screen-
 ### Layer responsibilities
 - **Data**: DTOs, API clients and service implementations. Only knows about Domain layer
 - **Domain**: Domain entities, business rules and service protocols. Lives separately from other layers
-- **Presentation**: SwiftUI views, ViewModels (state & event handling), navigation coordinator, design system. Only knows about Domain layer
+- **Presentation**: SwiftUI views, ViewModels (state & handlers), navigation coordinator, design system. Only knows about Domain layer
 
 ### State management
 
-- For state management, I use an approach inspired by the BLoC package from Flutter (which is also similar to MVI). Each view has a state, events, and a handler class that processes user actions into an updated state. I use the ViewModel suffix for these classes in Swift, as it is more convenient for me
-- ViewModels should not depend on UI frameworks (including SwiftUI) or handle localization. There should be a clear separation of concerns - ViewModel is responsible for business, logic and state, not UI rendering, or presentation details or navigation
+- Each screen has an `@Observable` ViewModel holding `private(set)` state and plain methods. State is only ever mutated inside the ViewModel; the view reads it and calls methods
+- Derived values (`isLoading`, `isEmptyList`, `characters`) are computed on the ViewModel rather than assembled in the view, so the view stays layout-only
+- ViewModels do not depend on UI frameworks (including SwiftUI) or handle localization. A ViewModel is responsible for state and logic, not for rendering, presentation details or navigation
+- Loading state is modelled with `DelayedResult<T>` — an enum of `none / inProgress / success(T) / failure(Error)`, so a spinner and a stale value cannot coexist
 
 ### Data flow
 
 Clean architecture ensures unidirectional data flow (one way) keeping UI, business logic, and data sources clearly separated, predictable, and easy to test:
-- User Action (event) ->
+- User action ->
 - View ->
-- ViewModel ->
+- ViewModel method ->
 - Abstract interface (protocol) ->
     - implementation is hidden (is known only for DI) and can be replaced with another one that conforms to the interface
 - Updated state ->
@@ -73,7 +76,8 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 ### Dependency Injection
 
 - The main architectural dependency injection (services) is implemented via protocols (see DependencyInjection.swift). ViewModels do not know anything about the concrete implementations of services - only about the service protocols
-- There are also observable classes with purely view-related responsibilities, such as navigation, error presentation, and logging user events to an analytics service. These classes are needed only in the Presentation layer, so no additional abstraction is required. They are injected only into the UI and registered using Swift's EnvironmentKeys. (see EnvironmentValues.swift)
+- There are also observable classes with purely view-related responsibilities — navigation (`Coordinator`) and error presentation (`ErrorHandler`). These are needed only in the Presentation layer, so no additional abstraction is required. They are `@Observable` and injected through the SwiftUI environment in `Main.swift`
+- Services that hold state (`UserStatsService`, `ConnectivityService`) are `@Observable` too. A ViewModel exposes them as computed properties, and SwiftUI tracks the change through to the view — so there are no subscriptions, no cancellables and no manual refresh calls anywhere in the app
 
 ### Navigation / Coordinator
 
@@ -83,26 +87,37 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 
 ### Error handling
 
-- APIError (data) is mapped to AppError (domain) - this helps enforce separation between layers
-- AppError localization is handled in the Presentation layer
-- AppView is wrapped with ErrorOverlay, which is responsible for displaying one toast at a time
-- The ErrorHandler is stored in the environment and should be injected into views where errors may be thrown
+- `APIError` (data) is mapped to `AppError` (domain) - this helps enforce separation between layers
+- `AppError` has only the cases the UI actually distinguishes — `emptyState`, `noConnection` and `caught(Error)`. The mapping wraps rather than discards, so an HTTP status code or a `URLError` survives into crash reporting instead of being flattened into a renamed category. The domain type still names only `Error`, never a transport type
+- `AppError` localization is handled in the Presentation layer
+- `AppView` is wrapped with `ErrorOverlay`, outside the `NavigationStack`, so one toast at a time is shown above whichever page is on screen
+- Cancellation is not an error: it is filtered once in `ErrorHandler` and again in each loader, so a superseded request neither shows a toast nor overwrites state its successor owns
+
+### Concurrency
+
+- Swift 6 language mode with `SWIFT_STRICT_CONCURRENCY = complete` and `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, so UI code is main-actor isolated by default and the exceptions are the interesting part
+- **The view owns async lifetime.** ViewModels hold no `Task` handles. Work is started by `.task` / `.task(id:)`, which means SwiftUI cancels it when the screen goes away and restarts it when its inputs change. `.task(id: query)` is the whole restart-on-search-or-filter mechanism, and pagination is a `.task` on the last row
+- **Restartable vs droppable is expressed per loader**, not globally: `reload()` is superseded by a newer query, `loadMore()` refuses re-entry while a page is in flight
+- **Networking runs off the main actor.** `APIClient.performRequest` is `@concurrent`, so the request, the response logging and JSON decoding all happen on the cooperative pool rather than blocking the main thread. `nonisolated` alone would not be enough — under approachable concurrency a `nonisolated async` function still runs on the caller's executor
+- No Combine anywhere. `ConnectivityService` iterates `NWPathMonitor` as an `AsyncSequence` and publishes the result as observable state, so consumers read `isConnected` rather than subscribing to anything
 
 ## Other capabilities
 
 - API client is done with retry logic (3 times)
 - System/Dark/Light theme switch
-- Localization switch
+- Localization (English / Spanish), switched from the system Settings app
 - Design system elements + Layout constants
 - Fresh install detection -> storage clearing
-- Analytics logger
+- Analytics events logged from the presentation layer
 
 ## Testing
 
-Unit tests are written using Apple's framework. The following ViewModels are covered:
+Unit tests are written using Swift Testing (`@Suite`, `@Test`, `#expect`). Covered:
 
-- `AppViewModel`
-- `CharactersListViewModel`
-- `CharactersFiltersViewModel`
-- `SettingsViewModel`
-- `OnboardingViewModel`
+- `AppViewModel` — splash gating, state derived from the stats service, connectivity
+- `CharactersListViewModel` — loading, pagination, dedupe, search debounce, filters, and the cancellation/supersession rules
+- `CharactersFiltersViewModel`, `SettingsViewModel`, `OnboardingViewModel`
+- `ErrorHandler` — cancellation filtering, silent empty state, localization, and that the underlying error survives into reporting
+
+Races are tested deterministically: the service mock exposes an `onRequest` hook that fires inside the
+request, so a test can change state mid-flight without depending on task scheduling.

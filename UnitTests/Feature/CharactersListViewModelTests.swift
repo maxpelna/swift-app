@@ -9,17 +9,16 @@ import Testing
 @testable import swift_app
 
 extension ViewModelTestsSuite {
-    @MainActor
     struct CharactersListViewModelTests {
         private func makeViewModel(service: MockPCharactersService) -> CharactersListViewModel {
             DIContainer.shared.charactersService = service
             return CharactersListViewModel()
         }
 
-        // MARK: - initialLoad
+        // MARK: - reload
 
         @Test
-        func initialLoad_success_setsSuccessfulResult() async {
+        func reload_success_setsSuccessfulResult() async {
             let mock = MockPCharactersService()
             mock.stubbedResult = CharactersResult(
                 characters: [.stub()],
@@ -27,56 +26,161 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
             #expect(vm.charactersResult.isSuccessful)
-            #expect(vm.charactersResult.value?.count == 1)
+            #expect(vm.characters.count == 1)
             #expect(mock.callCount == 1)
             #expect(mock.lastPage == 1)
         }
 
         @Test
-        func initialLoad_failure_setsErrorResult() async {
+        func reload_failure_setsErrorResult() async {
             let mock = MockPCharactersService()
-            mock.stubbedError = AppError.networkUnavailable
+            mock.stubbedError = AppError.noConnection
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
             #expect(vm.charactersResult.isError)
             #expect(!vm.charactersResult.isSuccessful)
         }
 
         @Test
-        func initialLoad_noopWhenAlreadySuccessful() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [.stub()],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            #expect(mock.callCount == 1)
-        }
-
-        @Test
-        func fetchCharacters_cancellationError_resetsCharactersResultToNone() async {
+        func reload_cancellation_leavesStateToItsSuccessor() async {
             let mock = MockPCharactersService()
             mock.stubbedError = CancellationError()
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
-            #expect(vm.charactersResult.isNone)
+            #expect(!vm.charactersResult.isError)
+            #expect(vm.charactersResult.isInProgress)
+        }
+
+        @Test
+        func reload_resetsPaginationBackToFirstPage() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: true
+            )
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 2)],
+                hasNextPage: true
+            )
+            await vm.loadMore()
+            #expect(mock.lastPage == 2)
+
+            mock.stubbedResult = CharactersResult(
+                characters: [],
+                hasNextPage: false
+            )
+            vm.setFilters(gender: .female, status: nil)
+            await vm.reload()
+
+            #expect(mock.lastPage == 1)
+        }
+
+        @Test
+        func reload_whenQueryChangesDuringRequest_discardsResult() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: true
+            )
+
+            let vm = makeViewModel(service: mock)
+            mock.onRequest = { vm.setFilters(gender: .female, status: nil) }
+
+            await vm.reload()
+
+            #expect(!vm.charactersResult.isSuccessful)
+            #expect(vm.charactersResult.isInProgress)
+        }
+
+        @Test
+        func reload_whenQueryUnchangedAndAlreadyLoaded_doesNotRefetch() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: true
+            )
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 2)],
+                hasNextPage: true
+            )
+            await vm.loadMore()
+            #expect(vm.characters.map(\.id) == [1, 2])
+
+            await vm.reload()
+
+            #expect(mock.callCount == 2)
+            #expect(vm.characters.map(\.id) == [1, 2])
+        }
+
+        @Test
+        func reload_whenQueryChanged_refetches() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: false
+            )
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            vm.setFilters(gender: .female, status: nil)
+            await vm.reload()
+
+            #expect(mock.callCount == 2)
+        }
+
+        @Test
+        func reload_afterError_refetches() async {
+            let mock = MockPCharactersService()
+            mock.stubbedError = AppError.noConnection
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+            #expect(vm.charactersResult.isError)
+
+            mock.stubbedError = nil
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: false
+            )
+            await vm.reload()
+
+            #expect(vm.charactersResult.isSuccessful)
+            #expect(mock.callCount == 2)
+        }
+
+        @Test
+        func reload_afterCancellation_refetches() async {
+            let mock = MockPCharactersService()
+            mock.stubbedError = CancellationError()
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+            #expect(vm.charactersResult.isInProgress)
+
+            mock.stubbedError = nil
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: false
+            )
+            await vm.reload()
+
+            #expect(vm.charactersResult.isSuccessful)
         }
 
         // MARK: - loadMore
@@ -90,11 +194,8 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
+            await vm.reload()
+            await vm.loadMore()
 
             #expect(mock.callCount == 1)
         }
@@ -108,20 +209,38 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
             mock.stubbedResult = CharactersResult(
                 characters: [.stub(id: 2)],
                 hasNextPage: false
             )
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
+            await vm.loadMore()
 
-            #expect(vm.charactersResult.value?.count == 2)
+            #expect(vm.characters.count == 2)
             #expect(vm.loadMoreResult.isNone)
             #expect(mock.callCount == 2)
             #expect(mock.lastPage == 2)
+        }
+
+        @Test
+        func loadMore_skipsCharactersAlreadyLoaded() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: true
+            )
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1), .stub(id: 2), .stub(id: 2)],
+                hasNextPage: false
+            )
+            await vm.loadMore()
+
+            #expect(vm.characters.map(\.id) == [1, 2])
         }
 
         @Test
@@ -133,31 +252,53 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
-            mock.stubbedError = AppError.networkUnavailable
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
+            mock.stubbedError = AppError.noConnection
+            await vm.loadMore()
 
             #expect(vm.loadMoreResult.isError)
-            #expect(vm.charactersResult.value?.count == 1)
+            #expect(vm.characters.count == 1)
         }
 
         @Test
-        func loadMore_cancellationError_resetsLoadMoreResultToNone() async {
+        func loadMore_cancellation_leavesNoError() async {
             let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(characters: [.stub()], hasNextPage: true)
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub()],
+                hasNextPage: true
+            )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
-            mock.stubbedResult = CharactersResult(characters: [], hasNextPage: false)
             mock.stubbedError = CancellationError()
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
+            await vm.loadMore()
 
+            #expect(vm.loadMoreResult.isNone)
+        }
+
+        @Test
+        func loadMore_whenQueryChangesDuringRequest_discardsResult() async {
+            let mock = MockPCharactersService()
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 1)],
+                hasNextPage: true
+            )
+
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            mock.stubbedResult = CharactersResult(
+                characters: [.stub(id: 2)],
+                hasNextPage: true
+            )
+
+            mock.onRequest = { vm.setFilters(gender: .female, status: nil) }
+
+            await vm.loadMore()
+
+            #expect(vm.characters.map(\.id) == [1])
             #expect(vm.loadMoreResult.isNone)
         }
 
@@ -170,181 +311,24 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.setFilters(.female, .alive))
-            await vm.currentTask?.value
-
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
+            vm.setFilters(gender: .female, status: .alive)
+            vm.searchInput = "Rick"
+            await vm.debounceSearchInput()
+            await vm.reload()
 
             mock.stubbedResult = CharactersResult(
                 characters: [.stub(id: 2)],
                 hasNextPage: false
             )
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
+            await vm.loadMore()
 
             #expect(mock.lastName == "Rick")
             #expect(mock.lastGender == .female)
             #expect(mock.lastStatus == .alive)
         }
 
-        // MARK: - clearLoadMore
-
         @Test
-        func clearLoadMore_resetsLoadMoreResultToNone() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [.stub()],
-                hasNextPage: true
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            mock.stubbedError = AppError.networkUnavailable
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
-
-            #expect(vm.loadMoreResult.isError)
-
-            vm.addEvent(.clearLoadMore)
-            await vm.currentTask?.value
-
-            #expect(vm.loadMoreResult.isNone)
-        }
-
-        // MARK: - setSearchQuery
-
-        @Test
-        func setSearchQuery_updatesSearchQueryState() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
-
-            #expect(vm.searchQuery == "Rick")
-        }
-
-        @Test
-        func setSearchQuery_sameQuery_doesNotFetchAgain() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
-            let callsAfterFirstQuery = mock.callCount
-
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
-
-            #expect(mock.callCount == callsAfterFirstQuery)
-        }
-
-        @Test
-        func setSearchQuery_differentQuery_fetchesAgain() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
-
-            vm.addEvent(.setSearchQuery("Morty"))
-            await vm.currentTask?.value
-
-            #expect(mock.callCount == 3)
-            #expect(mock.lastName == "Morty")
-        }
-
-        @Test
-        func setSearchQuery_resetsPageToOne() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [.stub()],
-                hasNextPage: true
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            mock.stubbedResult = CharactersResult(
-                characters: [.stub(id: 2)],
-                hasNextPage: false
-            )
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
-
-            vm.addEvent(.setSearchQuery("Rick"))
-            await vm.currentTask?.value
-
-            #expect(mock.lastPage == 1)
-        }
-
-        // MARK: - setFilters
-
-        @Test
-        func setFilters_updatesSelectedFiltersAndFetches() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            vm.addEvent(.setFilters(.female, .alive))
-            await vm.currentTask?.value
-
-            #expect(vm.selectedGender == .female)
-            #expect(vm.selectedStatus == .alive)
-            #expect(mock.lastGender == .female)
-            #expect(mock.lastStatus == .alive)
-            #expect(mock.lastPage == 1)
-        }
-
-        @Test
-        func setFilters_clearFilters_nilsSelection() async {
-            let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.setFilters(.male, .dead))
-            await vm.currentTask?.value
-
-            vm.addEvent(.setFilters(nil, nil))
-            await vm.currentTask?.value
-
-            #expect(vm.selectedGender == nil)
-            #expect(vm.selectedStatus == nil)
-        }
-
-        @Test
-        func setFilters_resetsPageToOne() async {
+        func loadMore_whenPageAddsNothingNew_keepsTheListUnchanged() async {
             let mock = MockPCharactersService()
             mock.stubbedResult = CharactersResult(
                 characters: [.stub(id: 1)],
@@ -352,64 +336,134 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
+            await vm.loadMore()
+
+            #expect(vm.characters.map(\.id) == [1])
+            #expect(vm.loadMoreResult.isNone)
+        }
+
+        // MARK: - debounceSearchInput
+
+        @Test
+        func debounceSearchInput_commitsInputIntoQuery() async {
+            let mock = MockPCharactersService()
+
+            let vm = makeViewModel(service: mock)
+            vm.searchInput = "Rick"
+            await vm.debounceSearchInput()
+
+            #expect(vm.query.searchQuery == "Rick")
+        }
+
+        @Test
+        func debounceSearchInput_sameInput_leavesQueryUntouched() async {
+            let mock = MockPCharactersService()
+
+            let vm = makeViewModel(service: mock)
+            vm.searchInput = "Rick"
+            await vm.debounceSearchInput()
+
+            let queryAfterFirstCommit = vm.query
+            await vm.debounceSearchInput()
+
+            #expect(vm.query == queryAfterFirstCommit)
+        }
+
+        // MARK: - setFilters
+
+        @Test
+        func setFilters_updatesQueryWithoutFetching() {
+            let mock = MockPCharactersService()
+
+            let vm = makeViewModel(service: mock)
+            vm.setFilters(gender: .female, status: .alive)
+
+            #expect(vm.query.gender == .female)
+            #expect(vm.query.status == .alive)
+            #expect(mock.callCount == 0)
+        }
+
+        @Test
+        func setFilters_clearFilters_nilsSelection() {
+            let mock = MockPCharactersService()
+
+            let vm = makeViewModel(service: mock)
+            vm.setFilters(gender: .male, status: .dead)
+            vm.setFilters(gender: nil, status: nil)
+
+            #expect(vm.query.gender == nil)
+            #expect(vm.query.status == nil)
+        }
+
+        @Test
+        func setFilters_sameSelection_leavesQueryUnchanged() {
+            let mock = MockPCharactersService()
+
+            let vm = makeViewModel(service: mock)
+            vm.setFilters(gender: .male, status: .dead)
+
+            let queryAfterFirstApply = vm.query
+            vm.setFilters(gender: .male, status: .dead)
+
+            #expect(vm.query == queryAfterFirstApply)
+        }
+
+        @Test
+        func loadMore_afterFailedPage_retriesSuccessfully() async {
+            let mock = MockPCharactersService()
             mock.stubbedResult = CharactersResult(
-                characters: [.stub(id: 2)],
+                characters: [.stub(id: 99)],
                 hasNextPage: true
             )
-            vm.addEvent(.loadMore)
-            await vm.currentTask?.value
 
+            let vm = makeViewModel(service: mock)
+            await vm.reload()
+
+            mock.stubbedError = AppError.caught(APIError.server(statusCode: 429, description: nil))
+            await vm.loadMore()
+            #expect(vm.loadMoreResult.isError)
+
+            mock.stubbedError = nil
             mock.stubbedResult = CharactersResult(
-                characters: [],
+                characters: [.stub(id: 100)],
                 hasNextPage: false
             )
-            vm.addEvent(.setFilters(.female, nil))
-            await vm.currentTask?.value
+            await vm.loadMore()
 
-            #expect(mock.lastPage == 1)
+            #expect(vm.characters.map(\.id) == [99, 100])
+            #expect(vm.loadMoreResult.isNone)
         }
 
-        // MARK: - hasAppliedFilters
+        // MARK: - loadMoreIfNeeded
 
         @Test
-        func hasAppliedFilters_falseWhenNoneSet() {
-            let mock = MockPCharactersService()
-            let vm = makeViewModel(service: mock)
-
-            #expect(!vm.hasAppliedFilters)
-        }
-
-        @Test
-        func hasAppliedFilters_trueWhenGenderSet() async {
+        func loadMoreIfNeeded_onlyLoadsForTheLastLoadedItem() async {
             let mock = MockPCharactersService()
             mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
+                characters: [.stub(id: 1), .stub(id: 99)],
+                hasNextPage: true
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.setFilters(.female, nil))
-            await vm.currentTask?.value
+            await vm.reload()
 
-            #expect(vm.hasAppliedFilters)
+            await vm.loadMoreIfNeeded(after: 1)
+            #expect(mock.callCount == 1)
+
+            await vm.loadMoreIfNeeded(after: 99)
+            #expect(mock.callCount == 2)
         }
 
         @Test
-        func hasAppliedFilters_trueWhenStatusSet() async {
+        func loadMoreIfNeeded_ignoredWhenNothingIsLoaded() async {
             let mock = MockPCharactersService()
-            mock.stubbedResult = CharactersResult(
-                characters: [],
-                hasNextPage: false
-            )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.setFilters(nil, .alive))
-            await vm.currentTask?.value
+            await vm.loadMoreIfNeeded(after: 1)
 
-            #expect(vm.hasAppliedFilters)
+            #expect(mock.callCount == 0)
         }
 
         // MARK: - isEmptyList
@@ -423,8 +477,7 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
             #expect(vm.isEmptyList)
         }
@@ -438,46 +491,9 @@ extension ViewModelTestsSuite {
             )
 
             let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
+            await vm.reload()
 
             #expect(!vm.isEmptyList)
-        }
-
-        // MARK: - canLoadMore
-
-        @Test
-        func canLoadMore_trueForLastItemWhenPageAvailable() async {
-            let mock = MockPCharactersService()
-            let character = CharacterEntity.stub(id: 99)
-            mock.stubbedResult = CharactersResult(
-                characters: [character],
-                hasNextPage: true
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            #expect(vm.canLoadMore(99))
-            #expect(!vm.canLoadMore(1))
-        }
-
-        @Test
-        func canLoadMore_falseIfNextPageIsNotAvailable() async {
-            let mock = MockPCharactersService()
-            let character = CharacterEntity.stub(id: 99)
-            mock.stubbedResult = CharactersResult(
-                characters: [character],
-                hasNextPage: false
-            )
-
-            let vm = makeViewModel(service: mock)
-            vm.addEvent(.initialLoad)
-            await vm.currentTask?.value
-
-            #expect(!vm.canLoadMore(99))
-            #expect(!vm.canLoadMore(1))
         }
     }
 }

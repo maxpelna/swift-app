@@ -100,20 +100,4 @@ final class DIContainer {
     }()
 
     private init() {}
-
-    init(
-        charactersService: PCharactersService,
-        connectivityService: PConnectivityService,
-        userStatsService: PUserStatsService,
-        analyticsService: PAnalyticsService,
-        keychainService: PKeychainService,
-        errorReportingService: PErrorReportingService
-    ) {
-        self.charactersService = charactersService
-        self.connectivityService = connectivityService
-        self.userStatsService = userStatsService
-        self.analyticsService = analyticsService
-        self.keychainService = keychainService
-        self.errorReportingService = errorReportingService
-    }
 }

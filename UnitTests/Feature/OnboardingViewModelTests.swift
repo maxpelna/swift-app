@@ -9,7 +9,6 @@ import Testing
 @testable import swift_app
 
 extension ViewModelTestsSuite {
-    @MainActor
     struct OnboardingViewModelTests {
         private func makeViewModel(stats: MockPUserStatsService) -> OnboardingViewModel {
             DIContainer.shared.userStatsService = stats
@@ -23,7 +22,7 @@ extension ViewModelTestsSuite {
 
             #expect(!stats.isOnboardingFinished)
 
-            vm.addEvent(.finishOnboarding)
+            vm.finishOnboarding()
 
             #expect(stats.isOnboardingFinished)
             #expect(stats.setOnboardingCallCount == 1)

@@ -3,19 +3,15 @@
 //  swift-appTests
 //
 
-import Combine
+import Foundation
+import Observation
 @testable import swift_app
 
+@Observable
 final class MockPConnectivityService: PConnectivityService {
-    private let subject: CurrentValueSubject<Bool, Never>
+    var isConnected: Bool
 
-    var connectivityStatus: AnyPublisher<Bool, Never> { subject.eraseToAnyPublisher() }
-
-    init(initialValue: Bool = true) {
-        subject = CurrentValueSubject(initialValue)
-    }
-
-    func send(_ isConnected: Bool) {
-        subject.send(isConnected)
+    init(isConnected: Bool = true) {
+        self.isConnected = isConnected
     }
 }

@@ -10,8 +10,6 @@ import SwiftUI
 struct CharactersListView: View {
     @State private var viewModel = CharactersListViewModel()
 
-    @StateObject private var debounceObserver = InputDebouncerObserver()
-
     @Environment(Coordinator.self)
     private var coordinator
 
@@ -19,26 +17,26 @@ struct CharactersListView: View {
     private var errorHandler
 
     var body: some View {
-        LoadingOverlay(isLoading: viewModel.charactersResult.isInProgress || viewModel.charactersResult.isNone) {
+        LoadingOverlay(isLoading: viewModel.isLoading) {
             if viewModel.isEmptyList {
                 CharactersEmptyView()
             } else {
                 List {
-                    ForEach(viewModel.charactersResult.value ?? []) { character in
+                    ForEach(viewModel.characters) { character in
                         CharactersListItem(character: character)
-                            .onAppear {
-                                tryToLoadMoreItems(character.id)
+                            .task {
+                                await viewModel.loadMoreIfNeeded(after: character.id)
                             }
                     }
 
                     if viewModel.loadMoreResult.isInProgress {
                         ProgressView()
+                            .id(UUID())
                             .tint(.accentColor)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
-                            .id(viewModel.page)
                     }
                 }
             }
@@ -60,45 +58,37 @@ struct CharactersListView: View {
                 }
             }
         }
-        .searchable(text: $debounceObserver.input)
+        .searchable(text: $viewModel.searchInput)
         .searchPresentationToolbarBehavior(.avoidHidingContent)
-        .task {
-            viewModel.addEvent(.initialLoad)
+        .task(id: viewModel.searchInput) {
+            await viewModel.debounceSearchInput()
         }
-        .onChange(of: debounceObserver.output) { _, newValue in
-            viewModel.addEvent(.setSearchQuery(newValue))
+        .task(id: viewModel.query) {
+            await viewModel.reload()
         }
-        .onChange(of: viewModel.charactersResult.isError) { _, newValue in
-            guard newValue, let error = viewModel.charactersResult.error else { return }
+        .onChange(of: viewModel.charactersResult.isError) { _, isError in
+            guard isError else { return }
 
-            errorHandler.showErrorMessage(error)
+            errorHandler.showErrorMessage(viewModel.charactersResult.error)
         }
-        .onChange(of: viewModel.loadMoreResult.isError) { _, newValue in
-            guard newValue, let error = viewModel.loadMoreResult.error else { return }
+        .onChange(of: viewModel.loadMoreResult.isError) { _, isError in
+            guard isError else { return }
 
-            errorHandler.showErrorMessage(error)
+            errorHandler.showErrorMessage(viewModel.loadMoreResult.error)
         }
-    }
-
-    private func tryToLoadMoreItems(_ id: Int) {
-        guard viewModel.canLoadMore(id) else { return }
-
-        viewModel.addEvent(.loadMore)
     }
 
     private func onFilterIconTap() {
         coordinator.presentSheet(
             .charactersFilter(
                 CharactersFilterViewConfig(
-                    selectedGender: viewModel.selectedGender,
-                    selectedStatus: viewModel.selectedStatus
+                    selectedGender: viewModel.query.gender,
+                    selectedStatus: viewModel.query.status
                 ) { selectedGender, selectedStatus in
                     coordinator.dismissSheet()
-                    viewModel.addEvent(
-                        .setFilters(
-                            selectedGender,
-                            selectedStatus
-                        )
+                    viewModel.setFilters(
+                        gender: selectedGender,
+                        status: selectedStatus
                     )
                 }
             )

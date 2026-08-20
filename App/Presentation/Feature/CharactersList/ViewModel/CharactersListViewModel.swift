@@ -9,140 +9,113 @@ import Observation
 
 @Observable
 final class CharactersListViewModel: CharactersServiceInjectable {
-    // MARK: - Event
-
-    enum Event {
-        case initialLoad
-        case loadMore
-        case clearLoadMore
-        case setSearchQuery(String)
-        case setFilters(CharacterGender?, CharacterStatus?)
-    }
-
-    // MARK: - Private variables
-
-    private var canLoadMore: Bool = false
-
     // MARK: - State
 
-    private(set) var charactersResult: DelayedResult<[CharacterEntity]> = DelayedResult.none()
-    private(set) var loadMoreResult: DelayedResult<Void> = DelayedResult.none()
-    private(set) var page: Int = 1
-    private(set) var searchQuery: String = ""
-    private(set) var selectedGender: CharacterGender?
-    private(set) var selectedStatus: CharacterStatus?
+    var searchInput: String = ""
 
-    var hasAppliedFilters: Bool {
-        selectedGender != nil || selectedStatus != nil
+    private(set) var query = CharactersQuery()
+    private(set) var charactersResult: DelayedResult<[CharacterEntity]> = .none
+    private(set) var loadMoreResult: DelayedResult<Void> = .none
+
+    var characters: [CharacterEntity] {
+        charactersResult.value ?? []
+    }
+
+    var isLoading: Bool {
+        charactersResult.isInProgress || charactersResult.isNone
     }
 
     var isEmptyList: Bool {
-        !charactersResult.isInProgress && (charactersResult.value ?? []).isEmpty
+        !charactersResult.isInProgress && characters.isEmpty
     }
 
-    // MARK: - Task concern handlers
-
-    @ObservationIgnored var currentTask: Task<Void, Never>?
+    private var page: Int = 1
+    private var canLoadMore = false
+    private var loadedQuery: CharactersQuery?
 
     // MARK: - Handlers
 
-    func canLoadMore(_ id: Int) -> Bool {
-        !loadMoreResult.isInProgress && canLoadMore == true && charactersResult.value?.last?.id == id
+    func debounceSearchInput() async {
+        guard searchInput != query.searchQuery else { return }
+
+        try? await Task.sleep(for: .seconds(Duration.debounce))
+        guard !Task.isCancelled else { return }
+
+        query.searchQuery = searchInput
     }
 
-    func addEvent(_ event: Event) {
-        currentTask?.cancel()
-        currentTask = Task {
-            switch event {
-            case .initialLoad: await initialLoad()
+    func loadMoreIfNeeded(after id: Int) async {
+        guard id == charactersResult.value?.last?.id else { return }
 
-            case .loadMore: await loadMore()
+        await loadMore()
+    }
 
-            case .clearLoadMore: clearLoadMoreResult()
+    func setFilters(gender: CharacterGender?, status: CharacterStatus?) {
+        query.gender = gender
+        query.status = status
+    }
 
-            case let .setSearchQuery(query): await setSearchQuery(query: query)
+    func reload() async {
+        // Re-appearing with results already on screen must not throw away pagination.
+        // Anything else — a new query, an error, a run that never finished — reloads.
+        guard !(charactersResult.isSuccessful && loadedQuery == query) else { return }
 
-            case let .setFilters(gender, status): await setFilters(gender: gender, status: status)
-            }
+        charactersResult = .inProgress
+        loadMoreResult = .none
+        canLoadMore = false
+        page = 1
+
+        let requestedQuery = query
+
+        do {
+            let result = try await fetchCharacters(page: page)
+
+            guard requestedQuery == query else { return }
+
+            charactersResult = .success(result.characters)
+            canLoadMore = result.hasNextPage
+            loadedQuery = requestedQuery
+        } catch {
+            guard !error.isCancellation else { return }
+
+            charactersResult = .failure(error)
         }
     }
 
-    private func initialLoad() async {
-        guard !charactersResult.isInProgress && !charactersResult.isSuccessful else { return }
+    func loadMore() async {
+        guard canLoadMore, !loadMoreResult.isInProgress else { return }
 
-        charactersResult = .inProgress()
-        page = 1
-        await fetchCharacters()
-    }
-
-    private func loadMore() async {
-        guard !loadMoreResult.isInProgress && canLoadMore else { return }
-
-        loadMoreResult = .inProgress()
+        let requestedQuery = query
+        loadMoreResult = .inProgress
 
         do {
-            let result = try await charactersService.charactersResult(
-                page: page + 1,
-                name: searchQuery,
-                status: selectedStatus,
-                gender: selectedGender
-            )
+            let result = try await fetchCharacters(page: page + 1)
+
+            // A newer query already reset `page` — appending here would desync it.
+            guard requestedQuery == query else {
+                loadMoreResult = .none
+                return
+            }
+
+            let existing = characters
+            var knownIds = Set(existing.map(\.id))
+            let newCharacters = result.characters.filter { knownIds.insert($0.id).inserted }
 
             page += 1
-
-            var updatedCharactersList = [CharacterEntity]()
-            updatedCharactersList.append(contentsOf: charactersResult.value ?? [])
-            updatedCharactersList.append(contentsOf: result.characters)
-
-            charactersResult = .fromValue(updatedCharactersList)
             canLoadMore = result.hasNextPage
-            loadMoreResult = .none()
-        } catch is CancellationError {
-            loadMoreResult = .none()
+            charactersResult = .success(existing + newCharacters)
+            loadMoreResult = .none
         } catch {
-            loadMoreResult = .fromError(error)
+            loadMoreResult = error.isCancellation ? .none : .failure(error)
         }
     }
 
-    private func clearLoadMoreResult() {
-        loadMoreResult = .none()
-    }
-
-    private func setSearchQuery(query: String) async {
-        guard searchQuery != query else { return }
-
-        charactersResult = .inProgress()
-        page = 1
-        searchQuery = query
-        await fetchCharacters()
-    }
-
-    private func setFilters(
-        gender: CharacterGender?,
-        status: CharacterStatus?
-    ) async {
-        charactersResult = .inProgress()
-        page = 1
-        selectedGender = gender
-        selectedStatus = status
-        await fetchCharacters()
-    }
-
-    private func fetchCharacters() async {
-        do {
-            let result = try await charactersService.charactersResult(
-                page: page,
-                name: searchQuery,
-                status: selectedStatus,
-                gender: selectedGender
-            )
-
-            charactersResult = .fromValue(result.characters)
-            canLoadMore = result.hasNextPage
-        } catch is CancellationError {
-            charactersResult = .none()
-        } catch {
-            charactersResult = .fromError(error)
-        }
+    private func fetchCharacters(page: Int) async throws -> CharactersResult {
+        try await charactersService.charactersResult(
+            page: page,
+            name: query.searchQuery,
+            status: query.status,
+            gender: query.gender
+        )
     }
 }

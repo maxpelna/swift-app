@@ -9,13 +9,12 @@ import Testing
 @testable import swift_app
 
 extension ViewModelTestsSuite {
-    @MainActor
     struct CharactersFiltersViewModelTests {
         @Test
         func initialLoad_setsGenderAndStatus() {
             let vm = CharactersFiltersViewModel()
 
-            vm.addEvent(.initialLoad(.female, .alive))
+            vm.initialLoad(gender: .female, status: .alive)
 
             #expect(vm.selectedGender == .female)
             #expect(vm.selectedStatus == .alive)
@@ -25,7 +24,7 @@ extension ViewModelTestsSuite {
         func initialLoad_nilValues_leavesSelectionsNil() {
             let vm = CharactersFiltersViewModel()
 
-            vm.addEvent(.initialLoad(nil, nil))
+            vm.initialLoad(gender: nil, status: nil)
 
             #expect(vm.selectedGender == nil)
             #expect(vm.selectedStatus == nil)
@@ -35,7 +34,7 @@ extension ViewModelTestsSuite {
         func setGender_updatesSelectedGender() {
             let vm = CharactersFiltersViewModel()
 
-            vm.addEvent(.setGender(.male))
+            vm.setGender(.male)
 
             #expect(vm.selectedGender == .male)
             #expect(vm.selectedStatus == nil)
@@ -44,9 +43,9 @@ extension ViewModelTestsSuite {
         @Test
         func setGender_nil_clearsGender() {
             let vm = CharactersFiltersViewModel()
-            vm.addEvent(.setGender(.female))
+            vm.setGender(.female)
 
-            vm.addEvent(.setGender(nil))
+            vm.setGender(nil)
 
             #expect(vm.selectedGender == nil)
         }
@@ -55,7 +54,7 @@ extension ViewModelTestsSuite {
         func setStatus_updatesSelectedStatus() {
             let vm = CharactersFiltersViewModel()
 
-            vm.addEvent(.setStatus(.dead))
+            vm.setStatus(.dead)
 
             #expect(vm.selectedStatus == .dead)
             #expect(vm.selectedGender == nil)
@@ -64,9 +63,9 @@ extension ViewModelTestsSuite {
         @Test
         func setStatus_nil_clearsStatus() {
             let vm = CharactersFiltersViewModel()
-            vm.addEvent(.setStatus(.alive))
+            vm.setStatus(.alive)
 
-            vm.addEvent(.setStatus(nil))
+            vm.setStatus(nil)
 
             #expect(vm.selectedStatus == nil)
         }
@@ -74,9 +73,9 @@ extension ViewModelTestsSuite {
         @Test
         func clearFilters_nilsBothSelections() {
             let vm = CharactersFiltersViewModel()
-            vm.addEvent(.initialLoad(.male, .dead))
+            vm.initialLoad(gender: .male, status: .dead)
 
-            vm.addEvent(.clearFilters)
+            vm.clearFilters()
 
             #expect(vm.selectedGender == nil)
             #expect(vm.selectedStatus == nil)

@@ -1,652 +1,601 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "appThemeDark" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dark"
+  "sourceLanguage": "en",
+  "strings": {
+    "appThemeDark": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oscuro"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oscuro"
           }
         }
       }
     },
-    "appThemeLight" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Light"
+    "appThemeLight": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claro"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claro"
           }
         }
       }
     },
-    "appThemeSystem" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "System"
+    "appThemeSystem": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sistema"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema"
           }
         }
       }
     },
-    "characterGender" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gender"
+    "characterGender": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gender"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Género"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Género"
           }
         }
       }
     },
-    "characterGenderFemale" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Female"
+    "characterGenderFemale": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Female"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Femenino"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Femenino"
           }
         }
       }
     },
-    "characterGenderGenderless" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Genderless"
+    "characterGenderGenderless": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genderless"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin género"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin género"
           }
         }
       }
     },
-    "characterGenderMale" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Male"
+    "characterGenderMale": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Male"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Masculino"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masculino"
           }
         }
       }
     },
-    "characterGenderSubtitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gender: %@"
+    "characterGenderSubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gender: %@"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Género: %@"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Género: %@"
           }
         }
       }
     },
-    "characterGenderUnknown" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
+    "characterGenderUnknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desconocido"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconocido"
           }
         }
       }
     },
-    "characterStatus" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status"
+    "characterStatus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estado"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado"
           }
         }
       }
     },
-    "characterStatusAlive" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alive"
+    "characterStatusAlive": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alive"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vivo"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vivo"
           }
         }
       }
     },
-    "characterStatusDead" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dead"
+    "characterStatusDead": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dead"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muerto"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muerto"
           }
         }
       }
     },
-    "characterStatusSubtitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status: %@"
+    "characterStatusSubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status: %@"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estado: %@"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado: %@"
           }
         }
       }
     },
-    "characterStatusUnknown" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
+    "characterStatusUnknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desconocido"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconocido"
           }
         }
       }
     },
-    "charactersTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Characters"
+    "charactersTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Characters"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Personajes"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personajes"
           }
         }
       }
     },
-    "errorDecode" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cannot decode response"
+    "errorDefault": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opps. Something went wrong."
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede decodificar la respuesta"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ups. Algo salió mal."
           }
         }
       }
     },
-    "errorDefault" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opps. Something went wrong."
+    "errorNetworkUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No internet connection"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ups. Algo salió mal."
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión a internet"
           }
         }
       }
     },
-    "errorInvalidUrl" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid URL"
+    "filterTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URL no válida"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtro"
           }
         }
       }
     },
-    "errorNetworkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection"
+    "generalApply": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin conexión a internet"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicar"
           }
         }
       }
     },
-    "errorServerStatus" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server status: %lld"
+    "generalCancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estado del servidor: %lld"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
           }
         }
       }
     },
-    "filterTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filter"
+    "generalClear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filtro"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar"
           }
         }
       }
     },
-    "generalApply" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apply"
+    "generalFinish": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplicar"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalizar"
           }
         }
       }
     },
-    "generalCancel" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
+    "generalNotSelected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not selected"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancelar"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No seleccionado"
           }
         }
       }
     },
-    "generalClear" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
+    "generalSelected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Borrar"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionado"
           }
         }
       }
     },
-    "generalFinish" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finish"
+    "noCharactersFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No characters found"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizar"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se encontraron personajes"
           }
         }
       }
     },
-    "generalNotSelected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not selected"
+    "noNetworkConnectionTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No network connection"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No seleccionado"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión de red"
           }
         }
       }
     },
-    "generalSelected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selected"
+    "onboardingDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This app is built with Swift to demonstrate my approach of using technology as end of 2025. It follows clean architecture principles with unidirectional data flow, custom MVI for state management approach that is inherited from BLoC. More in README. Open source API: https://rickandmortyapi.com"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seleccionado"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta app está creada con Swift para demostrar mi enfoque del uso de la tecnología a finales de 2025. Sigue principios de arquitectura limpia con flujo de datos unidireccional y un MVI personalizado para la gestión del estado, heredado de BLoC. Más información en el README. API de código abierto: https://rickandmortyapi.com"
           }
         }
       }
     },
-    "noCharactersFound" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No characters found"
+    "secretTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secret"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se encontraron personajes"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secreto"
           }
         }
       }
     },
-    "noNetworkConnectionTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No network connection"
+    "settingsAppearance": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin conexión de red"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apariencia"
           }
         }
       }
     },
-    "onboardingDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This app is built with Swift to demonstrate my approach of using technology as end of 2025. It follows clean architecture principles with unidirectional data flow, custom MVI for state management approach that is inherited from BLoC. More in README. Open source API: https://rickandmortyapi.com"
+    "settingsLanguage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta app está creada con Swift para demostrar mi enfoque del uso de la tecnología a finales de 2025. Sigue principios de arquitectura limpia con flujo de datos unidireccional y un MVI personalizado para la gestión del estado, heredado de BLoC. Más información en el README. API de código abierto: https://rickandmortyapi.com"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
           }
         }
       }
     },
-    "secretTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Secret"
+    "settingsResetAlertButton": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Secreto"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar"
           }
         }
       }
     },
-    "settingsAppearance" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appearance"
+    "settingsResetAlertDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase all and start from scratch?"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apariencia"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Borrar todo y empezar desde cero?"
           }
         }
       }
     },
-    "settingsLanguage" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Language"
+    "settingsResetAlertTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erase all?"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Idioma"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Borrar todo?"
           }
         }
       }
     },
-    "settingsResetAlertButton" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erase"
+    "settingsResetAll": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset all"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Borrar"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restablecer todo"
           }
         }
       }
     },
-    "settingsResetAlertDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erase all and start from scratch?"
+    "settingsTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Borrar todo y empezar desde cero?"
-          }
-        }
-      }
-    },
-    "settingsResetAlertTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erase all?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Borrar todo?"
-          }
-        }
-      }
-    },
-    "settingsResetAll" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset all"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restablecer todo"
-          }
-        }
-      }
-    },
-    "settingsTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajustes"
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
           }
         }
       }
     }
   },
-  "version" : "1.1"
+  "version": "1.1"
 }

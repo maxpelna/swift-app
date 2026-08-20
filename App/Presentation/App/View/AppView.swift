@@ -19,7 +19,7 @@ struct AppView: View {
     var body: some View {
         @Bindable var coordinator = coordinator
 
-        Group {
+        ErrorOverlay {
             switch viewModel.appState {
             case .loading:
                 SplashView()
@@ -31,24 +31,22 @@ struct AppView: View {
 
             case .authorized:
                 NavigationStack(path: $coordinator.path) {
-                    ErrorOverlay {
-                        CharactersListView()
-                    }
-                    .navigationDestination(for: PageRoute.self) { route in
-                        coordinator.build(page: route)
-                    }
-                    .sheet(item: $coordinator.sheet) { route in
-                        coordinator.build(sheet: route)
-                    }
+                    CharactersListView()
+                        .navigationDestination(for: PageRoute.self) { route in
+                            coordinator.build(page: route)
+                        }
+                        .sheet(item: $coordinator.sheet) { route in
+                            coordinator.build(sheet: route)
+                        }
                 }
                 .slideFromBottom()
             }
         }
         .animation(.smooth, value: viewModel.appState)
         .task {
-            viewModel.addEvent(.startApp)
+            await viewModel.startApp()
         }
-        .onChange(of: viewModel.appTheme) { _, newValue in
+        .onChange(of: viewModel.appTheme, initial: true) { _, newValue in
             triggerThemeChange(newValue)
         }
         .onOpenURL { url in

@@ -7,11 +7,8 @@
 
 import SwiftUI
 
-struct OnboardingView: View {
+struct OnboardingView: View, AnalyticsServiceInjectable {
     @State private var viewModel = OnboardingViewModel()
-
-    @Environment(AnalyticsLogger.self)
-    private var logger
 
     var body: some View {
         VStack {
@@ -33,7 +30,7 @@ struct OnboardingView: View {
     }
 
     private func onFinishTap() {
-        logger.log(AnalyticsEvent(name: .onFinishOnboardingTap))
-        viewModel.addEvent(.finishOnboarding)
+        analyticsService.log(AnalyticsEvent(name: .onFinishOnboardingTap))
+        viewModel.finishOnboarding()
     }
 }

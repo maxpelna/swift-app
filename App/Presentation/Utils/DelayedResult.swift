@@ -7,52 +7,49 @@
 
 import Foundation
 
-struct DelayedResult<T> {
-    let value: T?
-    let error: Error?
-    let isInProgress: Bool
+enum DelayedResult<T> {
+    case none
+    case inProgress
+    case success(T)
+    case failure(Error)
+
+    // MARK: - Values
+
+    var value: T? {
+        guard case let .success(value) = self else { return nil }
+
+        return value
+    }
+
+    var error: Error? {
+        guard case let .failure(error) = self else { return nil }
+
+        return error
+    }
+
+    // MARK: - State
+
+    var isNone: Bool {
+        guard case .none = self else { return false }
+
+        return true
+    }
+
+    var isInProgress: Bool {
+        guard case .inProgress = self else { return false }
+
+        return true
+    }
 
     var isSuccessful: Bool {
-        value != nil
+        guard case .success = self else { return false }
+
+        return true
     }
 
     var isError: Bool {
-        error != nil
-    }
+        guard case .failure = self else { return false }
 
-    var isNone: Bool {
-        value == nil && error == nil && !isInProgress
-    }
-
-    // MARK: - Initializers
-
-    init(value: T?, error: Error?, isInProgress: Bool) {
-        self.value = value
-        self.error = error
-        self.isInProgress = isInProgress
-    }
-
-    static func fromError(_ error: Error) -> DelayedResult {
-        DelayedResult(value: nil, error: error, isInProgress: false)
-    }
-
-    static func fromValue(_ value: T) -> DelayedResult {
-        DelayedResult(value: value, error: nil, isInProgress: false)
-    }
-
-    static func inProgress() -> DelayedResult {
-        DelayedResult(value: nil, error: nil, isInProgress: true)
-    }
-
-    static func none() -> DelayedResult {
-        DelayedResult(value: nil, error: nil, isInProgress: false)
-    }
-
-    static func fromNullable(_ value: T?) -> DelayedResult {
-        value.map { .fromValue($0) } ?? .none()
-    }
-
-    static func success() -> DelayedResult<Void> {
-        .fromValue(())
+        return true
     }
 }
