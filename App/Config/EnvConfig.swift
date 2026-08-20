@@ -21,11 +21,4 @@ nonisolated enum EnvConfig {
         }
         return value
     }()
-
-    static let prefix: String = {
-        guard let value = Bundle.main.infoDictionary?["PREFIX"] as? String else {
-            fatalError("PREFIX missing from Info.plist — check .xcconfig assignment")
-        }
-        return value + ".Defaults"
-    }()
 }

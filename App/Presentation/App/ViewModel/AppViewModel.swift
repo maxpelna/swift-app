@@ -8,7 +8,7 @@
 import Observation
 
 @Observable
-final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable, KeychainServiceInjectable {
+final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjectable {
     // MARK: - State
 
     private(set) var isSplashFinished = false
@@ -38,20 +38,11 @@ final class AppViewModel: UserStatsServiceInjectable, ConnectivityServiceInjecta
     // MARK: - Handlers
 
     func startApp() async {
-        potentiallyClearAllStorageAfterReinstall()
-
         // Just a dummy timer to show splash view. In real app there can be multiple checks
         // e.g. if token exists, if launched with deep link, if should show pin code.
         try? await Task.sleep(for: .milliseconds(splashDurationInMilliseconds))
         guard !Task.isCancelled else { return }
 
         isSplashFinished = true
-    }
-
-    private func potentiallyClearAllStorageAfterReinstall() {
-        if keychainService.isFirstInstall() {
-            userStatsService.resetAll()
-            keychainService.markInstalled()
-        }
     }
 }

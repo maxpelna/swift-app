@@ -107,7 +107,6 @@ Clean architecture ensures unidirectional data flow (one way) keeping UI, busine
 - System/Dark/Light theme switch
 - Localization (English / Spanish), switched from the system Settings app
 - Design system elements + Layout constants
-- Fresh install detection -> storage clearing
 - Analytics events logged from the presentation layer
 
 ## Testing

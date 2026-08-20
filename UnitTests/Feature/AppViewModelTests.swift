@@ -12,12 +12,10 @@ extension ViewModelTestsSuite {
     struct AppViewModelTests {
         private func makeViewModel(
             stats: MockPUserStatsService,
-            connectivity: MockPConnectivityService = MockPConnectivityService(),
-            keychain: MockPKeychainService = MockPKeychainService()
+            connectivity: MockPConnectivityService = MockPConnectivityService()
         ) -> AppViewModel {
             DIContainer.shared.userStatsService = stats
             DIContainer.shared.connectivityService = connectivity
-            DIContainer.shared.keychainService = keychain
             return AppViewModel(splashDurationInMilliseconds: 1)
         }
 
@@ -95,34 +93,6 @@ extension ViewModelTestsSuite {
             connectivity.isConnected = false
 
             #expect(!vm.isConnected)
-        }
-
-        // MARK: - startApp
-
-        @Test
-        func startApp_firstInstall_resetsStorageAndMarksInstalled() async {
-            let stats = MockPUserStatsService()
-            let keychain = MockPKeychainService()
-            keychain.firstInstallReturn = true
-            let vm = makeViewModel(stats: stats, keychain: keychain)
-
-            await vm.startApp()
-
-            #expect(stats.resetAllCallCount == 1)
-            #expect(keychain.markInstalledCallCount == 1)
-        }
-
-        @Test
-        func startApp_returningUser_doesNotResetStorage() async {
-            let stats = MockPUserStatsService()
-            let keychain = MockPKeychainService()
-            keychain.firstInstallReturn = false
-            let vm = makeViewModel(stats: stats, keychain: keychain)
-
-            await vm.startApp()
-
-            #expect(stats.resetAllCallCount == 0)
-            #expect(keychain.markInstalledCallCount == 0)
         }
     }
 }

@@ -1,3 +1,2 @@
 // Note: "//" is the xcconfig comment character, so URLs need the $() trick to escape "//".
 BASE_URL=https:$()/$()/rickandmortyapi.com/api
-PREFIX=PROD
