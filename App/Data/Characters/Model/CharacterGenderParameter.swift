@@ -16,7 +16,7 @@ enum CharacterGenderParameter: String, Codable {
     nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)
-        self = CharacterGenderParameter(rawValue: value) ?? .unknown
+        self = CharacterGenderParameter(rawValue: value.lowercased()) ?? .unknown
     }
 
     init?(from domain: CharacterGender?) {

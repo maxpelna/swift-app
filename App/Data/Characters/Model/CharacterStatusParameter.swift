@@ -15,7 +15,7 @@ enum CharacterStatusParameter: String, Codable {
     nonisolated init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)
-        self = CharacterStatusParameter(rawValue: value) ?? .unknown
+        self = CharacterStatusParameter(rawValue: value.lowercased()) ?? .unknown
     }
 
     init?(from domain: CharacterStatus?) {
