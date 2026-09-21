@@ -60,7 +60,7 @@ final class APIClient {
 
     // MARK: - Private methods
 
-    private func requestWithRetry<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
+    private func requestWithRetry<Response: Decodable & Sendable>(_ urlRequest: URLRequest) async throws -> Response {
         var lastError: APIError = .unknown(URLError(.unknown))
 
         for attempt in 0..<RetryPolicy.maxAttempts {
@@ -82,7 +82,7 @@ final class APIClient {
     }
 
     @concurrent
-    private func performRequest<Response: Decodable>(_ urlRequest: URLRequest) async throws -> Response {
+    private func performRequest<Response: Decodable & Sendable>(_ urlRequest: URLRequest) async throws -> Response {
         let (data, response): (Data, URLResponse)
         do {
             (data, response) = try await session.data(for: urlRequest)

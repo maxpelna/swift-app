@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Abstract Interface
 
 protocol APIEndpoint {
-    associatedtype Response: Decodable
+    associatedtype Response: Decodable & Sendable
 
     var path: String { get }
     var method: APIMethod { get }
