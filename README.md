@@ -6,8 +6,8 @@ A demonstration project showcasing my approach to building scalable, testable, a
 
 ## Requirements
 
-- iOS 26.0+
-- Xcode 26.0+
+- iOS 27.0+
+- Xcode 27.0+
 - Swift 6.0+
 
 **Getting started:**
@@ -27,10 +27,6 @@ while production ships without them.
 **SwiftLint**
 
 - Project uses SwiftLint for code styling and consistency
-
-## Dependencies
-
-- [Nuke](https://github.com/kean/Nuke) - added for image loading and caching instead of custom solution
 
 ## Pages
 

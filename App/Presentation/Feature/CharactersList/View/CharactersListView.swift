@@ -60,6 +60,7 @@ struct CharactersListView: View {
         }
         .searchable(text: $viewModel.searchInput)
         .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .asyncImageURLSession(AsyncImageSessions.session)
         .task(id: viewModel.searchInput) {
             await viewModel.debounceSearchInput()
         }

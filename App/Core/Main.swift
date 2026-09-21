@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Nuke
 
 @main
 struct Main: App {
@@ -19,18 +18,5 @@ struct Main: App {
         }
         .environment(coordinator)
         .environment(errorHandler)
-    }
-
-    init() {
-        initImagePipeline()
-    }
-
-    private func initImagePipeline() {
-        ImagePipeline.shared = ImagePipeline(
-            configuration: .withDataCache(
-                name: EnvConfig.bundleId + ".ImageCache",
-                sizeLimit: 200 * 1_024 * 1_024
-            )
-        )
     }
 }

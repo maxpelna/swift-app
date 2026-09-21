@@ -5,7 +5,6 @@
 //  Created by Maksims Pelna on 26/12/2025.
 //
 
-import NukeUI
 import SwiftUI
 
 struct CharactersListItem: View {
@@ -14,7 +13,10 @@ struct CharactersListItem: View {
     var body: some View {
         HStack(spacing: 0) {
             if let url = URL(string: character.image) {
-                LazyImage(url: url) { state in
+                AsyncImage(
+                    url: url,
+                    transaction: Transaction(animation: .easeInOut)
+                ) { state in
                     if let image = state.image {
                         image
                             .resizable()
